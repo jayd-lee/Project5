@@ -1,0 +1,143 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class User {
+    private int ID;
+    private String name;
+    private String accountType;
+    private ArrayList<String> sentMessages;
+    private ArrayList<String> receivedMessages;
+    private int nextMessageID = 1;
+
+    public User(int ID, String name, String accountType) {
+        this.ID = ID;
+        this.name = name;
+        this.accountType = accountType;
+        this.sentMessages = new ArrayList<>();
+        this.receivedMessages = new ArrayList<>();
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public ArrayList<String> getSentMessages() {
+        return sentMessages;
+    }
+
+    public ArrayList<String> getReceivedMessages() {
+        return receivedMessages;
+    }
+
+    public void sendMessage(User receiver, String content, Date timestamp) {
+        Message message = new Message(getNextMessageID(), this, receiver, content, timestamp);
+        this.sentMessages.add(String.valueOf(message));
+        receiver.receiveMessage(message);
+    }
+
+    public void receiveMessage(Message message) {
+        this.receivedMessages.add(String.valueOf(message));
+    }
+
+    public void editMessage(Message message, String newContent) {
+        if (this.sentMessages.contains(message)) {
+            message.setContent(newContent);
+        }
+    }
+
+    public void deleteMessage(Message message) {
+        if (this.sentMessages.contains(message)) {
+            this.sentMessages.remove(message);
+        } else if (this.receivedMessages.contains(message)) {
+            this.receivedMessages.remove(message);
+        }
+    }
+
+    private int getNextMessageID() {
+        int id = nextMessageID;
+        nextMessageID++;
+        return id;
+    }
+
+    public List<User> getCustomers() {
+        if (!this.getAccountType().equals("Seller")) {
+            // Only sellers have access to customer lists
+            return new ArrayList<User>();
+        }
+        List<User> customers = new ArrayList<User>();
+        for (String message : this.receivedMessages) {
+            User sender = Message.getSender();
+            if (sender.getAccountType().equals("Customer") && !customers.contains(sender)) {
+                customers.add(sender);
+            }
+        }
+        return customers;
+    }
+
+    public List<User> searchCustomers(String cust) {
+        List<User> customers = getCustomers();
+        List<User> results = new ArrayList<User>();
+        for (User customer : customers) {
+            if (customer.getName().toLowerCase().contains(cust.toLowerCase())) {
+                results.add(customer);
+            }
+        }
+        return results;
+    }
+
+    public List<User> getSellers() {
+        if (!this.getAccountType().equals("Customer")) {
+            return new ArrayList<User>();
+        }
+        List<User> sellers = new ArrayList<User>();
+        for (String message : this.receivedMessages) {
+            User sender = Message.getSender();
+            if (sender.getAccountType().equals("Seller") && !sellers.contains(sender)) {
+                sellers.add(sender);
+            }
+        }
+        return sellers;
+    }
+
+    public List<User> searchSellers(String sell) {
+        List<User> sellers = getSellers();
+        List<User> results = new ArrayList<User>();
+        for (User seller : sellers) {
+            if (seller.getName().toLowerCase().contains(sell.toLowerCase())) {
+                results.add(seller);
+            }
+        }
+        return results;
+    }
+
+    public void exportConversationToCSV() {
+        String fileName = this.name + "_conversation.csv";
+        try {
+            FileWriter fileWriter = new FileWriter(fileName);
+            fileWriter.append("Message ID,Sender,Receiver,Content,Timestamp\n");
+            for (String sentMessage : this.sentMessages) {
+                fileWriter.append(sentMessage + "\n");
+            }
+            for (String receivedMessage : this.receivedMessages) {
+                fileWriter.append(receivedMessage + "\n");
+            }
+            fileWriter.close();
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+
