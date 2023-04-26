@@ -1,0 +1,28 @@
+public class Store {
+    private int ID;
+    private String name;
+    private User seller;
+
+    public Store(int ID, String name, User seller) {
+        this.ID = ID;
+        this.name = name;
+        this.seller = seller;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public User getSeller() {
+        return seller;
+    }
+
+    public void setSeller(User seller) {
+        this.seller = seller;
+    }
+}
+
