@@ -1,0 +1,42 @@
+import java.util.Date;
+
+public class Message {
+    private int ID;
+    private static User sender;
+    private User receiver;
+    private String content;
+    private Date timestamp;
+
+    public Message(int ID, User sender, User receiver, String content, Date timestamp) {
+        this.ID = ID;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.content = content;
+        this.timestamp = timestamp;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public static User getSender() {
+        return sender;
+    }
+
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+}
