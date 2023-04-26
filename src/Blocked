@@ -1,0 +1,31 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Blocked {
+    private List<User> blockedUsers;
+    private List<User> invisibleUsers;
+
+    public Blocked() {
+        this.blockedUsers = new ArrayList<>();
+        this.invisibleUsers = new ArrayList<>();
+    }
+
+    public List<User> getBlockedUsers() {
+        return blockedUsers;
+    }
+
+    public List<User> getInvisibleUsers() {
+        return invisibleUsers;
+    }
+
+    public void addBlockedUser(User user) {
+        blockedUsers.add(user);
+    }
+
+
+    public void addInvisibleUser(User user) {
+        invisibleUsers.add(user);
+    }
+
+
+}
