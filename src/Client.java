@@ -1,8 +1,24 @@
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Client {
+    static Scanner scan = new Scanner(System.in);
+    private static ArrayList<String> messageList = new ArrayList<String>();
+    private static ArrayList<String> storeList = new ArrayList<String>();
+    private static ArrayList<String> sellerList = new ArrayList<String>();
+    private static ArrayList<String> customerList = new ArrayList<String>();
+    private static ArrayList<String> invisibleToList = new ArrayList<String>();
+
+    private static ArrayList<String> invisibleByList = new ArrayList<String>();
+    private static ArrayList<String> blockedList = new ArrayList<String>();
+
+    private static ArrayList<String> blockedMeList = new ArrayList<String>();
+
+
+    public static User user;
+    private static boolean isSeller;
     public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
         // create socket on agreed upon port (and local host for this example)...
         Socket socket = null;
