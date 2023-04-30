@@ -15,17 +15,17 @@ class Client {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             // reading from console
-            BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-            String line = null;
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String l = null;
 
-            while (!"Exit".equalsIgnoreCase(line)) {
+            while (!"Exit".equalsIgnoreCase(l)) {
 
-                line = console.readLine();
-                out.println(line);
+                l = br.readLine();
+                out.println(l);
                 out.flush();
                 System.out.println("Server replied " + in.readLine());
             }
-            console.close();
+            br.close();
         }
         catch (IOException e) {
             e.printStackTrace();
