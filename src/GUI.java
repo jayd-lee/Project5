@@ -182,7 +182,7 @@ public class GUI extends JComponent implements Runnable {
 
         listSellers.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) throws ArrayIndexOutOfBoundsException {
                 if (sellerList == null) {
                     JOptionPane.showMessageDialog(null, "There are no customers yet!");
                 } else {
@@ -213,21 +213,25 @@ public class GUI extends JComponent implements Runnable {
 
         searchSeller.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                if (sellerList == null) {
-                    JOptionPane.showMessageDialog(null, "There are no customers yet!");
-                } else {
-                    String search = sellerField.getText();
-                    for (int i = 0; i < sellerList.size(); i++) {
-                        if ((sellerList.get(i).getUsername()).equals(search)) {
-                            //new array of options
-                            Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
-                            int choice = JOptionPane.showOptionDialog(null, "Please select an option", search,
-                                    JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
+            public void actionPerformed(ActionEvent e) throws ArrayIndexOutOfBoundsException {
+                try {
+                    if (sellerList == null) {
+                        JOptionPane.showMessageDialog(null, "There are no customers yet!");
+                    } else {
+                        String search = sellerField.getText();
+                        for (int i = 0; i < sellerList.size(); i++) {
+                            if ((sellerList.get(i).getUsername()).equals(search)) {
+                                //new array of options
+                                Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
+                                int choice = JOptionPane.showOptionDialog(null, "Please select an option", search,
+                                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
 
+                            }
                         }
+                        JOptionPane.showMessageDialog(null, "Seller with this username was not found!");
                     }
-                    JOptionPane.showMessageDialog(null, "Seller with this username was not found!");
+                }catch (ArrayIndexOutOfBoundsException a) {
+                    JOptionPane.showMessageDialog(null, "There are no sellers yet!");
                 }
             }
         });
@@ -246,14 +250,18 @@ public class GUI extends JComponent implements Runnable {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                Object[] options = { "Edit username", "Edit Password", "Edit email", "Delete Account", "Close"};
-                int choice = JOptionPane.showOptionDialog(null, "Please select an option", "Account options",
-                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[4]);
                 try {
-                    writeAccounts();
-                    edit(userName, password, email, isSeller, choice);
-                } catch (IOException x) {
-                    JOptionPane.showMessageDialog(null, "There was an error editing your account!,", "Error", JOptionPane.ERROR_MESSAGE);
+                    Object[] options = {"Edit username", "Edit Password", "Edit email", "Delete Account", "Close"};
+                    int choice = JOptionPane.showOptionDialog(null, "Please select an option", "Account options",
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[4]);
+                    try {
+                        writeAccounts();
+                        edit(userName, password, email, isSeller, choice);
+                    } catch (IOException x) {
+                        JOptionPane.showMessageDialog(null, "There was an error editing your account!,", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (ArrayIndexOutOfBoundsException a) {
+                    JOptionPane.showMessageDialog(null, "There are no sellers yet!");
                 }
             }
         });
@@ -278,26 +286,31 @@ public class GUI extends JComponent implements Runnable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //want like a dropdown list or scroll list
-                ArrayList<String> choiceArray = new ArrayList<>();
-                for (int i = 0; i < customerList.size(); i++) {
-                    choiceArray.add(customerList.get(i).getUsername());
-                }
-                String[] choices = new String[choiceArray.size()];
-                for (int j = 0; j < choiceArray.size(); j++) {
-                    choices[j] = choiceArray.get(j);
-                }
-                if (customerList != null) {
-                    String user = (String) JOptionPane.showInputDialog(null, "Choose a user to message",
-                            "List of customers", JOptionPane.QUESTION_MESSAGE, null,
-                            choices, choices[0]);
+                try {
+                    ArrayList<String> choiceArray = new ArrayList<>();
+                    for (int i = 0; i < customerList.size(); i++) {
+                        choiceArray.add(customerList.get(i).getUsername());
+                    }
+                    String[] choices = new String[choiceArray.size()];
+                    for (int j = 0; j < choiceArray.size(); j++) {
+                        choices[j] = choiceArray.get(j);
+                    }
+                    if (customerList != null) {
+                        String user = (String) JOptionPane.showInputDialog(null, "Choose a user to message",
+                                "List of customers", JOptionPane.QUESTION_MESSAGE, null,
+                                choices, choices[0]);
 
-                    Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
-                    int choice = JOptionPane.showOptionDialog(null, "Please select an option", user,
-                            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
-                } else {
+                        Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
+                        int choice = JOptionPane.showOptionDialog(null, "Please select an option", user,
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "There are no customers yet!");
+                    }
+                } catch (ArrayIndexOutOfBoundsException a) {
                     JOptionPane.showMessageDialog(null, "There are no customers yet!");
                 }
             }
+
         });
 
         JButton searchCustomer = new JButton("Search Customer");
@@ -308,9 +321,7 @@ public class GUI extends JComponent implements Runnable {
         searchCustomer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (customerList == null) {
-                    JOptionPane.showMessageDialog(null, "There are no customers yet!");
-                } else {
+                try {
                     String search = customerField.getText();
                     for (int i = 0; i < customerList.size(); i++) {
                         if ((customerList.get(i).getUsername()).equals(search)) {
@@ -323,6 +334,9 @@ public class GUI extends JComponent implements Runnable {
                         }
                     }
                     JOptionPane.showMessageDialog(null, "Customer with this username was not found!");
+
+                } catch (ArrayIndexOutOfBoundsException a) {
+                    JOptionPane.showMessageDialog(null, "There are no customers yet!");
                 }
             }
         });
