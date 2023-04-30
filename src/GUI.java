@@ -622,105 +622,116 @@ public class GUI extends JComponent implements Runnable {
         if (choice == 0) {
             while (edit) {
                 String newUsername = JOptionPane.showInputDialog("Please enter a new username");
-                if (isSeller) {
-                    num = 0;
-                } else {
-                    num = 1;
-                }
-                if ((existingUsername(newUsername, num)) != true) {
+                if (newUsername != null) {
                     if (isSeller) {
-                        for (int i = 0; i < sellerList.size(); i++) {
-                            if ((sellerList.get(i).getUsername()).equals(username)) {
-                                (sellerList.get(i)).setUsername(newUsername);
-                            }
-                            if ((sellerList.get(i).getUsername()).equals(newUsername)) {
-                                JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                                success = true;
-                                edit = false;
-                            }
-                        }
+                        num = 0;
                     } else {
-                        for (int i = 0; i < customerList.size(); i++) {
-                            if ((customerList.get(i).getUsername()).equals(username)) {
-                                customerList.get(i).setUsername(newUsername);
+                        num = 1;
+                    }
+                    if ((existingUsername(newUsername, num)) != true) {
+                        if (isSeller) {
+                            for (int i = 0; i < sellerList.size(); i++) {
+                                if ((sellerList.get(i).getUsername()).equals(username)) {
+                                    (sellerList.get(i)).setUsername(newUsername);
+                                }
+                                if ((sellerList.get(i).getUsername()).equals(newUsername)) {
+                                    JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                                    success = true;
+                                    edit = false;
+                                }
                             }
-                            if ((customerList.get(i).getUsername()).equals(newUsername)) {
-                                JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                                success = true;
-                                edit = false;
+                        } else {
+                            for (int i = 0; i < customerList.size(); i++) {
+                                if ((customerList.get(i).getUsername()).equals(username)) {
+                                    customerList.get(i).setUsername(newUsername);
+                                }
+                                if ((customerList.get(i).getUsername()).equals(newUsername)) {
+                                    JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                                    success = true;
+                                    edit = false;
+                                }
                             }
+
                         }
 
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "This username already exists!", "Please try again!", JOptionPane.PLAIN_MESSAGE);
                     }
-
-
                 } else {
-                    JOptionPane.showMessageDialog(null, "This username already exists!", "Please try again!", JOptionPane.PLAIN_MESSAGE);
+                    break;
                 }
-            }
+                }
+
 
         } else if (choice == 1) {
             String newPassword = null;
-            while ((newPassword) == null || newPassword.isEmpty()) {
-                newPassword = JOptionPane.showInputDialog("Please enter a new password");
-            }
-            if (isSeller) {
-                for (int i = 0; i < sellerList.size(); i++) {
-                    if (((sellerList.get(i).getPassword()).equals(password)) && ((sellerList.get(i).getUsername()).equals(userName))) {
-                        sellerList.get(i).setPassword(newPassword);
+            newPassword = JOptionPane.showInputDialog("Please enter a new password");
+            if (newPassword != null) {
+                if (isSeller) {
+                    for (int i = 0; i < sellerList.size(); i++) {
+                        if (((sellerList.get(i).getPassword()).equals(password)) && ((sellerList.get(i).getUsername()).equals(userName))) {
+                            sellerList.get(i).setPassword(newPassword);
+                        }
+                        if ((sellerList.get(i).getPassword()).equals(newPassword)) {
+                            JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                            success = true;
+                        }
                     }
-                    if((sellerList.get(i).getPassword()).equals(newPassword)) {
-                        JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                        success = true;
+                } else {
+                    for (int i = 0; i < customerList.size(); i++) {
+                        if (((customerList.get(i).getPassword()).equals(password)) && ((customerList.get(i).getUsername()).equals(userName))) {
+                            customerList.get(i).setPassword(newPassword);
+                        }
+                        if ((customerList.get(i).getPassword()).equals(newPassword)) {
+                            JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                            success = true;
+                        }
                     }
                 }
             } else {
-                for (int i = 0; i < customerList.size(); i++) {
-                    if (((customerList.get(i).getPassword()).equals(password)) && ((customerList.get(i).getUsername()).equals(userName))) {
-                        customerList.get(i).setPassword(newPassword);
-                    }
-                    if((customerList.get(i).getPassword()).equals(newPassword)) {
-                        JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                        success = true;
-                    }
-                }
+
             }
 
         } else if (choice == 2) {
             while (edit) {
                 String newEmail = JOptionPane.showInputDialog("Please enter a new email");
-                if (isSeller) {
-                    num = 0;
-                } else {
-                    num = 1;
-                }
-                if ((existingEmail(newEmail, num)) != true) {
+                if (newEmail != null) {
                     if (isSeller) {
-                        for (int i = 0; i < sellerList.size(); i++) {
-                            if ((sellerList.get(i).getEmail()).equals(email)) {
-                                sellerList.get(i).setEmail(newEmail);
-                            }
-                            if((sellerList.get(i).getEmail()).equals(newEmail)) {
-                                JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                                edit = false;
-                                success = true;
-                            }
-                        }
+                        num = 0;
                     } else {
-                        for (int i = 0; i < customerList.size(); i++) {
-                            if ((customerList.get(i).getEmail()).equals(email)) {
-                                customerList.get(i).setEmail(newEmail);
+                        num = 1;
+                    }
+                    if ((existingEmail(newEmail, num)) != true) {
+                        if (isSeller) {
+                            for (int i = 0; i < sellerList.size(); i++) {
+                                if ((sellerList.get(i).getEmail()).equals(email)) {
+                                    sellerList.get(i).setEmail(newEmail);
+                                }
+                                if ((sellerList.get(i).getEmail()).equals(newEmail)) {
+                                    JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                                    edit = false;
+                                    success = true;
+                                }
                             }
-                            if((customerList.get(i).getEmail()).equals(newEmail)) {
-                                JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                                edit = false;
-                                success = true;
+                        } else {
+                            for (int i = 0; i < customerList.size(); i++) {
+                                if ((customerList.get(i).getEmail()).equals(email)) {
+                                    customerList.get(i).setEmail(newEmail);
+                                }
+                                if ((customerList.get(i).getEmail()).equals(newEmail)) {
+                                    JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                                    edit = false;
+                                    success = true;
+                                }
                             }
                         }
-                    }
 
+                    } else {
+                        JOptionPane.showMessageDialog(null, "This email is already associated with an account!", "Please try again!", JOptionPane.PLAIN_MESSAGE);
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "This email is already associated with an account!", "Please try again!", JOptionPane.PLAIN_MESSAGE);
+                    break;
                 }
             }
         } else if (choice == 3) {
@@ -743,6 +754,7 @@ public class GUI extends JComponent implements Runnable {
                     }
                 } else {
                     for (int i = 0; i < customerList.size(); i++) {
+                        //close window or remove buttons so user has to exit
                         if ((customerList.get(i).getUsername().equals(userName)) && (customerList.get(i).getEmail()).equals(email)) {
                             customerList.remove(i);
                         }
