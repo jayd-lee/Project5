@@ -911,9 +911,19 @@ public class GUI extends JComponent implements Runnable {
         Messages message = new Messages();
         messageList = message.getMessages();
         int sizes = (messageList != null) ? messageList.size() : 0;
-        if (sizes == 0) {
+        ArrayList<String> userRec = new ArrayList<>();
+        for(int i = 0; i < messageList.size(); i++) {
+            String[] messageToEdit = messageList.get(i).split(",");
+            if (messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                userRec.add(messageList.get(i));
+            }
+            if (messageToEdit[1].equals(userName) && messageToEdit[0].equals(recipient)) {
+                userRec.add(messageList.get(i));
+            }
+        }
+        if (userRec.size() == 0) {
             messageList.add(userName + "," + recipient + "," + time + "," + "START OF CONVO" + 
-                            "," + "false," + "false," + "false," + "false");
+                        "," + "false," + "false," + "false," + "false");
             System.out.println("inSizesidhvhjvhvuovuyhkvyuvu");
             message.writeMessages(messageList);
         }
@@ -2054,4 +2064,3 @@ public class GUI extends JComponent implements Runnable {
 
     }
 }
-
