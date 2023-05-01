@@ -1,0 +1,34 @@
+refresh.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        ArrayList<String> newMessages = new ArrayList<>();
+        ArrayList<String> newBlockedUsers = new ArrayList<>();
+        ArrayList<String> newInvisibleUsers = new ArrayList<>();
+
+        for (String message : messages) {
+            String[] messageSplit = message.split(", ");
+            if (messageSplit[0].equals(userName) && messageSplit[1].equals(user)) {
+                newMessages.add(message);
+            }
+        }
+
+        for (String blockedUser : blockedList) {
+            String[] blockedUserSplit = blockedUser.split(", ");
+            if (blockedUserSplit[0].equals(userName) && blockedUserSplit[1].equals(user)) {
+                newBlockedUsers.add(blockedUser);
+            }
+        }
+
+        for (String invisibleUser : invisibleList) {
+            String[] invisibleUserSplit = invisibleUser.split(", ");
+            if (invisibleUserSplit[0].equals(userName) && invisibleUserSplit[1].equals(user)) {
+                newInvisibleUsers.add(invisibleUser);
+            }
+        }
+
+        // Update the instance variables to reflect the new information
+        messages = newMessages;
+        blockedList = newBlockedUsers;
+        invisibleList = newInvisibleUsers;
+    }
+});
