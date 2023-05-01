@@ -25,7 +25,7 @@ public class GUI extends JComponent implements Runnable {
     private static boolean isSeller;
 
 
-    public void startProgram(String[] args) {
+    public void startProgram() {
         SwingUtilities.invokeLater(new GUI());
     }
 
@@ -600,6 +600,9 @@ public class GUI extends JComponent implements Runnable {
                     if (username.equals((user.trim()))) {
                         line = line.substring(line.indexOf(",") + 1, line.length());
                         line = line.trim();
+                        
+                        
+                        
                         if (password.equals(line.substring(0, line.indexOf(",")))) {
                             this.password = password;
                             return true;
