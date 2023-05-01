@@ -1,8 +1,11 @@
+import java.util.ArrayList;
+
 public class Account {
     private String email;
     private String username;
     private String password;
     private boolean isSeller;
+    private ArrayList<String> blockedUsers;
 
     public Account (String username, String password, String email, boolean isSeller) {
         this.email = email;

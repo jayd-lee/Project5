@@ -11,12 +11,9 @@ public class GUI extends JComponent implements Runnable {
 
     private static ArrayList<String> messageList = new ArrayList<String>();
     private static ArrayList<String> storeList = new ArrayList<String>();
-    private static ArrayList<String> invisibleToList = new ArrayList<String>();
+    private static ArrayList<String> invisibleList = new ArrayList<String>();
 
-    private static ArrayList<String> invisibleByList = new ArrayList<String>();
     private static ArrayList<String> blockedList = new ArrayList<String>();
-
-    private static ArrayList<String> blockedMeList = new ArrayList<String>();
 
 
     private static String userName;
@@ -34,6 +31,7 @@ public class GUI extends JComponent implements Runnable {
 
         readAccounts();
         readStores();
+        readBI();
         int option;
         option = welcome();
         if (option == 0) {
@@ -138,6 +136,8 @@ public class GUI extends JComponent implements Runnable {
                         }
                         if ((newAccount.getEmail() != null) && (newAccount.getPassword() != null) && (newAccount.getUsername() != null)) {
                             if (choice == 0) {
+                                blockedList.add(newAccount.getUsername());
+                                invisibleList.add(newAccount.getUsername());
                                 sellerList.add(newAccount);
                                 storeList.add(newAccount.getUsername() + ", ");
                                 userName = username;
@@ -146,6 +146,8 @@ public class GUI extends JComponent implements Runnable {
                                 isSeller = true;
                                 signup = false;
                             } else {
+                                blockedList.add(newAccount.getUsername());
+                                invisibleList.add(newAccount.getUsername());
                                 customerList.add(newAccount);
                                 userName = username;
                                 this.password = password;
@@ -641,7 +643,7 @@ public class GUI extends JComponent implements Runnable {
                 BufferedReader br = new BufferedReader(new FileReader("customers.txt"));
                 String line;
                 while ((line = br.readLine()) != null) {
-                    String user = line.substring(line.lastIndexOf(",") + 1, line.length());
+                    String user = line.substring(0, line.indexOf(","));
                     if (username.equals((user.trim()))) {
                         line = line.substring(line.indexOf(",") + 1, line.length());
                         line = line.trim();
@@ -850,7 +852,14 @@ public class GUI extends JComponent implements Runnable {
                             + user + "?", "Block?", JOptionPane.DEFAULT_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
             if (option == 0) {
+               for (int i = 0; i < blockedList.size(); i++) {
+                   String line = blockedList.get(i);
+                   if(((line.substring(0, line.indexOf(",") )).equals(userName))) {
+                       blockedList.set(i, line + ", " + user);
+                   }
 
+               }
+                writeBI();
             } else {
 
             }
@@ -860,18 +869,60 @@ public class GUI extends JComponent implements Runnable {
             Object[] options = {"YES", "NO"};
             int option =  JOptionPane.showOptionDialog(null, "Are you sure you want to be invisible to " + user + "?", "Invisible?", JOptionPane.DEFAULT_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+            for (int i = 0; i < invisibleList.size(); i++) {
+                String line = invisibleList.get(i);
+                if(((line.substring(0, line.indexOf(",") )).equals(userName))) {
+                    invisibleList.set(i, line + ", " + user);
+                }
+                writeBI();
+            }
         } else {
             //blank for close
         }
         return false;
     }
-
-public void writeBI() {
+public void readBI() {
         try {
-
+            BufferedReader br = new BufferedReader(new FileReader("blocked.txt"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                blockedList.add(line);
+            }
+            br.close();
         } catch (Exception e) {
 
         }
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("invisible.txt"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                invisibleList.add(line);
+            }
+            br.close();
+        } catch (Exception e) {
+
+        }
+}
+public void writeBI() {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("blocked.txt"));
+            for (int i = 0; i < blockedList.size(); i++) {
+                bw.write(blockedList.get(i) + "\n");
+            }
+            bw.close();
+        } catch (Exception e) {
+
+        }
+    try {
+        BufferedWriter bw = new BufferedWriter(new FileWriter("invisible.txt"));
+        for (int i = 0; i < invisibleList.size(); i++) {
+            bw.write(invisibleList.get(i));
+        }
+        bw.close();
+    } catch (Exception e) {
+
+    }
+
 }
 
     public String accountString(Account account) {
