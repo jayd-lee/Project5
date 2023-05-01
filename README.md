@@ -14,6 +14,6 @@
 ## CLASSES, INTERFACES, AND FILES
 
 #### *GUI.java:* 
-- Interface for creating user objects using username, password, and email parameters. Has User constructor and standard getters and setters
+- Class which handles the running of our GUI and also reads/stores account data for both sellers and customers
 #### *Account.java:*
-- class that implements User and creates a customer object, using the super keyword to call all the parameters from the User class inside the constructor
+- class that creates Account objects for customers and sellers
