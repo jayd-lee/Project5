@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5c48b6fb-f016-4f9e-b441-ef77e5a4c83b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/ChatClientGUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/ChatClientGUI$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ChatClientGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/ChatClientGUI.class" afterDir="false" />
+    <list default="true" id="ba397a99-9f27-42f5-90ed-60d217f0068e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$9.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/customers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/customers.txt" afterDir="false" />
