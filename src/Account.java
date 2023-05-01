@@ -4,7 +4,7 @@ public class Account {
     private String password;
     private boolean isSeller;
 
-    public Account (String email, String username, String password, boolean isSeller) {
+    public Account (String username, String password, String email, boolean isSeller) {
         this.email = email;
         this.password = password;
         this.username = username;

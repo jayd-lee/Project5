@@ -88,6 +88,11 @@ public class GUI extends JComponent implements Runnable {
                         JOptionPane.showMessageDialog(null, "Login successful!", "Logged In", JOptionPane.PLAIN_MESSAGE);
                         if (choice == 0) {
                             isSeller = true;
+                            for (int i = 0; i < sellerList.size(); i++) {
+                                if ((sellerList.get(i).getUsername().equals(username)) && (sellerList.get(i).getPassword().equals(password))) {
+                                    this.email = sellerList.get(i).getEmail();
+                                }
+                            }
                         } else {
                             isSeller = false;
                         }
@@ -127,9 +132,9 @@ public class GUI extends JComponent implements Runnable {
                     } else {
                         String password = JOptionPane.showInputDialog(null, "Please enter your password");
                         if (choice == 0) {
-                            newAccount = new Account(email, username, password, true);
+                            newAccount = new Account(username, password, email, true);
                         } else {
-                            newAccount = new Account(email, username, password, false);
+                            newAccount = new Account(username, password, email, false);
                         }
                         if ((newAccount.getEmail() != null) && (newAccount.getPassword() != null) && (newAccount.getUsername() != null)) {
                             if (choice == 0) {
@@ -177,36 +182,56 @@ public class GUI extends JComponent implements Runnable {
 
         JPanel topPanel = new JPanel();
         topPanel.setBackground(new Color(185, 240, 255));
-        JButton listSellers = new JButton("List Sellers");
-        topPanel.add(listSellers);
 
-        listSellers.addActionListener(new ActionListener() {
+        JButton listStores = new JButton("List Stores");
+        topPanel.add(listStores);
+
+        listStores.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String user = "";
                 try {
                     ArrayList<String> choiceArray = new ArrayList<>();
-                    for (int i = 0; i < sellerList.size(); i++) {
-                        choiceArray.add(sellerList.get(i).getUsername());
+                    for (int i = 0; i < storeList.size(); i++) {
+                        String userStores = storeList.get(i);
+                        userStores = userStores.substring(userStores.indexOf(",") + 1, userStores.length());
+                        while (userStores.contains(",")) {
+                            choiceArray.add(userStores.substring(0,userStores.indexOf(",")));
+                            userStores = userStores.substring(userStores.indexOf(",") + 1, userStores.length());
+                        }
                     }
+
                     String[] choices = new String[choiceArray.size()];
                     for (int j = 0; j < choiceArray.size(); j++) {
                         choices[j] = choiceArray.get(j);
                     }
 
-                    String user = (String) JOptionPane.showInputDialog(null, "Choose a user to message",
-                            "List of sellers", JOptionPane.QUESTION_MESSAGE, null,
+                    String store = (String) JOptionPane.showInputDialog(null, "Choose a store to message",
+                            "List of stores", JOptionPane.QUESTION_MESSAGE, null,
                             choices, choices[0]);
+
+                    try {
+                        BufferedReader br = new BufferedReader(new FileReader("stores.txt"));
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            if (line.contains(store)) {
+                                user =  line.substring(0, line.indexOf(","));
+                            }
+                        }
+                    } catch (Exception r) {
+
+                    }
 
                     Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
                     int choice = JOptionPane.showOptionDialog(null, "Please select an option", user,
                             JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
                     userInteraction(choice, user);
                 } catch (ArrayIndexOutOfBoundsException a) {
-                    JOptionPane.showMessageDialog(null, "There are no customers yet!");
+                    JOptionPane.showMessageDialog(null, "There are no sellers yet!");
                 }
-                }
-
+            }
         });
+
 
         JButton searchSeller = new JButton("Search Seller");
         topPanel.add(searchSeller);
@@ -388,7 +413,7 @@ public class GUI extends JComponent implements Runnable {
                     String name = JOptionPane.showInputDialog(null, "Enter the name of the store you'd like to delete!", "Delete store", JOptionPane.PLAIN_MESSAGE);
                     for (int i = 0; i < storeList.size(); i++) {
                         if ((storeList.get(i).contains(userName)) && (storeList.get(i).contains(name))) {
-                            String newString = ((storeList.get(i)).replace( name + ", ", " "));
+                            String newString = ((storeList.get(i)).replace( name + ", ", ""));
                             storeList.set(i, newString);
                             JOptionPane.showMessageDialog(null, "Store has been deleted!");
                             success = true;
@@ -486,7 +511,7 @@ public class GUI extends JComponent implements Runnable {
                 boolean isSeller = Boolean.parseBoolean(seller);
                 line = line.substring(line.indexOf(",") + 2, line.length());
                 String email = line;
-                Account newAccount = new Account(email, username, password, isSeller);
+                Account newAccount = new Account(username, password, email, isSeller);
                 customerList.add(newAccount);
             }
             br.close();
@@ -505,7 +530,7 @@ public class GUI extends JComponent implements Runnable {
                 boolean isSeller = Boolean.parseBoolean(seller);
                 line = line.substring(line.indexOf(",") + 2, line.length());
                 String email = line;
-                Account newAccount = new Account(email, username, password, isSeller);
+                Account newAccount = new Account(username, password, email, isSeller);
                 sellerList.add(newAccount);
             }
             br.close();
@@ -821,7 +846,8 @@ public class GUI extends JComponent implements Runnable {
             //msg.. open new window and will have to check if two users already have a shared file
         } else if (choice == 1) {
             Object[] options = {"YES", "NO"};
-            int option =  JOptionPane.showOptionDialog(null, "Are you sure you want to block " + user + "?", "Block?", JOptionPane.DEFAULT_OPTION,
+            int option =  JOptionPane.showOptionDialog(null, "Are you sure you want to block "
+                            + user + "?", "Block?", JOptionPane.DEFAULT_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
             if (option == 0) {
 
@@ -839,6 +865,15 @@ public class GUI extends JComponent implements Runnable {
         }
         return false;
     }
+
+public void writeBI() {
+        try {
+
+        } catch (Exception e) {
+
+        }
+}
+
     public String accountString(Account account) {
         return account.getUsername() + ", " + account.getPassword() + ", " + account.getEmail() + ", " + account.isSeller();
     }
