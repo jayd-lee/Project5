@@ -25,7 +25,7 @@ public class GUI extends JComponent implements Runnable {
     private static boolean isSeller;
 
 
-    public static void main(String[] args) {
+    public void startProgram(String[] args) {
         SwingUtilities.invokeLater(new GUI());
     }
 
@@ -183,9 +183,7 @@ public class GUI extends JComponent implements Runnable {
         listSellers.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (sellerList == null) {
-                    JOptionPane.showMessageDialog(null, "There are no customers yet!");
-                } else {
+                try {
                     ArrayList<String> choiceArray = new ArrayList<>();
                     for (int i = 0; i < sellerList.size(); i++) {
                         choiceArray.add(sellerList.get(i).getUsername());
@@ -202,8 +200,12 @@ public class GUI extends JComponent implements Runnable {
                     Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
                     int choice = JOptionPane.showOptionDialog(null, "Please select an option", user,
                             JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
+                    userInteraction(choice, user);
+                } catch (ArrayIndexOutOfBoundsException a) {
+                    JOptionPane.showMessageDialog(null, "There are no customers yet!");
                 }
             }
+
         });
 
         JButton searchSeller = new JButton("Search Seller");
@@ -213,21 +215,25 @@ public class GUI extends JComponent implements Runnable {
 
         searchSeller.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                if (sellerList == null) {
-                    JOptionPane.showMessageDialog(null, "There are no customers yet!");
-                } else {
+            public void actionPerformed(ActionEvent e) throws ArrayIndexOutOfBoundsException {
+                boolean success = false;
+                try {
                     String search = sellerField.getText();
                     for (int i = 0; i < sellerList.size(); i++) {
                         if ((sellerList.get(i).getUsername()).equals(search)) {
                             //new array of options
+                            success = true;
                             Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
                             int choice = JOptionPane.showOptionDialog(null, "Please select an option", search,
                                     JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
-
+                            userInteraction(choice, search);
                         }
                     }
-                    JOptionPane.showMessageDialog(null, "Seller with this username was not found!");
+                    if (success == false) {
+                        JOptionPane.showMessageDialog(null, "Seller with this username was not found!");
+                    }
+                }catch (ArrayIndexOutOfBoundsException a) {
+                    JOptionPane.showMessageDialog(null, "There are no sellers yet!");
                 }
             }
         });
@@ -240,23 +246,38 @@ public class GUI extends JComponent implements Runnable {
         //NEEDS TO DISPLAY USERNAME OF LOGGED IN USER
         JButton accountOptions = new JButton("Account options");
         centerPanel.add(accountOptions);
-        content.add(centerPanel, BorderLayout.CENTER);
+
 
         accountOptions.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                Object[] options = { "Edit username", "Edit Password", "Edit email", "Delete Account", "Close"};
-                int choice = JOptionPane.showOptionDialog(null, "Please select an option", "Account options",
-                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[4]);
                 try {
-                    writeAccounts();
-                    edit(userName, password, email, isSeller, choice);
-                } catch (IOException x) {
-                    JOptionPane.showMessageDialog(null, "There was an error editing your account!,", "Error", JOptionPane.ERROR_MESSAGE);
+                    Object[] options = {"Edit username", "Edit Password", "Edit email", "Delete Account", "Close"};
+                    int choice = JOptionPane.showOptionDialog(null, "Please select an option", "Account options",
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[4]);
+                    try {
+                        writeAccounts();
+                        edit(userName, password, email, isSeller, choice);
+                    } catch (IOException x) {
+                        JOptionPane.showMessageDialog(null, "There was an error editing your account!,", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (ArrayIndexOutOfBoundsException a) {
+                    JOptionPane.showMessageDialog(null, "There are no sellers yet!");
                 }
             }
         });
+        JButton refresh = new JButton("Refresh");
+        centerPanel.add(refresh);
+        content.add(centerPanel, BorderLayout.CENTER);
+
+        refresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
     }
 
     public void SellerGUIWindow() {
@@ -278,15 +299,16 @@ public class GUI extends JComponent implements Runnable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //want like a dropdown list or scroll list
-                ArrayList<String> choiceArray = new ArrayList<>();
-                for (int i = 0; i < customerList.size(); i++) {
-                    choiceArray.add(customerList.get(i).getUsername());
-                }
-                String[] choices = new String[choiceArray.size()];
-                for (int j = 0; j < choiceArray.size(); j++) {
-                    choices[j] = choiceArray.get(j);
-                }
-                if (customerList != null) {
+                try {
+                    ArrayList<String> choiceArray = new ArrayList<>();
+                    for (int i = 0; i < customerList.size(); i++) {
+                        choiceArray.add(customerList.get(i).getUsername());
+                    }
+                    String[] choices = new String[choiceArray.size()];
+                    for (int j = 0; j < choiceArray.size(); j++) {
+                        choices[j] = choiceArray.get(j);
+                    }
+
                     String user = (String) JOptionPane.showInputDialog(null, "Choose a user to message",
                             "List of customers", JOptionPane.QUESTION_MESSAGE, null,
                             choices, choices[0]);
@@ -294,10 +316,12 @@ public class GUI extends JComponent implements Runnable {
                     Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
                     int choice = JOptionPane.showOptionDialog(null, "Please select an option", user,
                             JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
-                } else {
+                    userInteraction(choice, user);
+                } catch (ArrayIndexOutOfBoundsException a) {
                     JOptionPane.showMessageDialog(null, "There are no customers yet!");
                 }
             }
+
         });
 
         JButton searchCustomer = new JButton("Search Customer");
@@ -308,27 +332,32 @@ public class GUI extends JComponent implements Runnable {
         searchCustomer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (customerList == null) {
-                    JOptionPane.showMessageDialog(null, "There are no customers yet!");
-                } else {
+                boolean success = false;
+                try {
                     String search = customerField.getText();
                     for (int i = 0; i < customerList.size(); i++) {
                         if ((customerList.get(i).getUsername()).equals(search)) {
-                            //open new message
+                            success = true;
                             Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
                             int choice = JOptionPane.showOptionDialog(null, "Please select an option", search,
                                     JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
-                            //String option = JOptionPane.showInputDialog(null, "Would you like to message this user?", search, JOptionPane.QUESTION_MESSAGE);
-                            //method Messaging Window? or like a window for their account where u can msg, block, invis
+                            userInteraction(choice, search);
+
                         }
                     }
-                    JOptionPane.showMessageDialog(null, "Customer with this username was not found!");
+                    if (success == false) {
+                        JOptionPane.showMessageDialog(null, "Customer with this username was not found!");
+                    }
+
+                } catch (ArrayIndexOutOfBoundsException a) {
+                    JOptionPane.showMessageDialog(null, "There are no customers yet!");
                 }
             }
         });
 
         JButton storeOptions = new JButton("Store Options");
         topPanel.add(storeOptions);
+
         content.add(topPanel, BorderLayout.NORTH);
 
         storeOptions.addActionListener(new ActionListener() {
@@ -381,9 +410,16 @@ public class GUI extends JComponent implements Runnable {
 
         JPanel centerPanel = new JPanel();
         centerPanel.setBackground(new Color(185, 240, 255));
-        JLabel user = new JLabel("Account: ");
-        //NEEDS TO DISPLAY USERNAME OF LOGGED IN USER
-        centerPanel.add(user);
+        JButton refresh = new JButton("Refresh");
+        centerPanel.add(refresh);
+
+        refresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
         JButton accountOptions = new JButton("Account options");
         centerPanel.add(accountOptions);
         content.add(centerPanel, BorderLayout.CENTER);
@@ -489,7 +525,6 @@ public class GUI extends JComponent implements Runnable {
                         line = line.substring(line.indexOf(",") + 1, line.lastIndexOf(","));
                         line = line.substring(line.indexOf("," + 1, line.length()));
                         if (line.equals(email)) {
-                            this.email = email;
                             return true;
                         }
                     }
@@ -506,7 +541,6 @@ public class GUI extends JComponent implements Runnable {
                         line = line.substring(line.indexOf(",") + 1, line.lastIndexOf(","));
                         line = line.substring(line.indexOf("," + 1, line.length()));
                         if (line.equals(email)) {
-                            this.email = email;
                             return true;
                         }
                     }
@@ -608,105 +642,116 @@ public class GUI extends JComponent implements Runnable {
         if (choice == 0) {
             while (edit) {
                 String newUsername = JOptionPane.showInputDialog("Please enter a new username");
-                if (isSeller) {
-                    num = 0;
-                } else {
-                    num = 1;
-                }
-                if ((existingUsername(newUsername, num)) != true) {
+                if (newUsername != null) {
                     if (isSeller) {
-                        for (int i = 0; i < sellerList.size(); i++) {
-                            if ((sellerList.get(i).getUsername()).equals(username)) {
-                                (sellerList.get(i)).setUsername(newUsername);
-                            }
-                            if ((sellerList.get(i).getUsername()).equals(newUsername)) {
-                                JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                                success = true;
-                                edit = false;
-                            }
-                        }
+                        num = 0;
                     } else {
-                        for (int i = 0; i < customerList.size(); i++) {
-                            if ((customerList.get(i).getUsername()).equals(username)) {
-                                customerList.get(i).setUsername(newUsername);
+                        num = 1;
+                    }
+                    if ((existingUsername(newUsername, num)) != true) {
+                        if (isSeller) {
+                            for (int i = 0; i < sellerList.size(); i++) {
+                                if ((sellerList.get(i).getUsername()).equals(username)) {
+                                    (sellerList.get(i)).setUsername(newUsername);
+                                }
+                                if ((sellerList.get(i).getUsername()).equals(newUsername)) {
+                                    JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                                    success = true;
+                                    edit = false;
+                                }
                             }
-                            if ((customerList.get(i).getUsername()).equals(newUsername)) {
-                                JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                                success = true;
-                                edit = false;
+                        } else {
+                            for (int i = 0; i < customerList.size(); i++) {
+                                if ((customerList.get(i).getUsername()).equals(username)) {
+                                    customerList.get(i).setUsername(newUsername);
+                                }
+                                if ((customerList.get(i).getUsername()).equals(newUsername)) {
+                                    JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                                    success = true;
+                                    edit = false;
+                                }
                             }
+
                         }
 
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "This username already exists!", "Please try again!", JOptionPane.PLAIN_MESSAGE);
                     }
-
-
                 } else {
-                    JOptionPane.showMessageDialog(null, "This username already exists!", "Please try again!", JOptionPane.PLAIN_MESSAGE);
+                    break;
                 }
             }
+
 
         } else if (choice == 1) {
             String newPassword = null;
-            while ((newPassword) == null || newPassword.isEmpty()) {
-                newPassword = JOptionPane.showInputDialog("Please enter a new password");
-            }
-            if (isSeller) {
-                for (int i = 0; i < sellerList.size(); i++) {
-                    if (((sellerList.get(i).getPassword()).equals(password)) && ((sellerList.get(i).getUsername()).equals(userName))) {
-                        sellerList.get(i).setPassword(newPassword);
+            newPassword = JOptionPane.showInputDialog("Please enter a new password");
+            if (newPassword != null) {
+                if (isSeller) {
+                    for (int i = 0; i < sellerList.size(); i++) {
+                        if (((sellerList.get(i).getPassword()).equals(password)) && ((sellerList.get(i).getUsername()).equals(userName))) {
+                            sellerList.get(i).setPassword(newPassword);
+                        }
+                        if ((sellerList.get(i).getPassword()).equals(newPassword)) {
+                            JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                            success = true;
+                        }
                     }
-                    if((sellerList.get(i).getPassword()).equals(newPassword)) {
-                        JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                        success = true;
+                } else {
+                    for (int i = 0; i < customerList.size(); i++) {
+                        if (((customerList.get(i).getPassword()).equals(password)) && ((customerList.get(i).getUsername()).equals(userName))) {
+                            customerList.get(i).setPassword(newPassword);
+                        }
+                        if ((customerList.get(i).getPassword()).equals(newPassword)) {
+                            JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                            success = true;
+                        }
                     }
                 }
             } else {
-                for (int i = 0; i < customerList.size(); i++) {
-                    if (((customerList.get(i).getPassword()).equals(password)) && ((customerList.get(i).getUsername()).equals(userName))) {
-                        customerList.get(i).setPassword(newPassword);
-                    }
-                    if((customerList.get(i).getPassword()).equals(newPassword)) {
-                        JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                        success = true;
-                    }
-                }
+
             }
 
         } else if (choice == 2) {
             while (edit) {
                 String newEmail = JOptionPane.showInputDialog("Please enter a new email");
-                if (isSeller) {
-                    num = 0;
-                } else {
-                    num = 1;
-                }
-                if ((existingEmail(newEmail, num)) != true) {
+                if (newEmail != null) {
                     if (isSeller) {
-                        for (int i = 0; i < sellerList.size(); i++) {
-                            if ((sellerList.get(i).getEmail()).equals(email)) {
-                                sellerList.get(i).setEmail(newEmail);
-                            }
-                            if((sellerList.get(i).getEmail()).equals(newEmail)) {
-                                JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                                edit = false;
-                                success = true;
-                            }
-                        }
+                        num = 0;
                     } else {
-                        for (int i = 0; i < customerList.size(); i++) {
-                            if ((customerList.get(i).getEmail()).equals(email)) {
-                                customerList.get(i).setEmail(newEmail);
+                        num = 1;
+                    }
+                    if ((existingEmail(newEmail, num)) != true) {
+                        if (isSeller) {
+                            for (int i = 0; i < sellerList.size(); i++) {
+                                if ((sellerList.get(i).getEmail()).equals(email)) {
+                                    sellerList.get(i).setEmail(newEmail);
+                                }
+                                if ((sellerList.get(i).getEmail()).equals(newEmail)) {
+                                    JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                                    edit = false;
+                                    success = true;
+                                }
                             }
-                            if((customerList.get(i).getEmail()).equals(newEmail)) {
-                                JOptionPane.showMessageDialog(null, "Account successfully edited!");
-                                edit = false;
-                                success = true;
+                        } else {
+                            for (int i = 0; i < customerList.size(); i++) {
+                                if ((customerList.get(i).getEmail()).equals(email)) {
+                                    customerList.get(i).setEmail(newEmail);
+                                }
+                                if ((customerList.get(i).getEmail()).equals(newEmail)) {
+                                    JOptionPane.showMessageDialog(null, "Account successfully edited!");
+                                    edit = false;
+                                    success = true;
+                                }
                             }
                         }
-                    }
 
+                    } else {
+                        JOptionPane.showMessageDialog(null, "This email is already associated with an account!", "Please try again!", JOptionPane.PLAIN_MESSAGE);
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "This email is already associated with an account!", "Please try again!", JOptionPane.PLAIN_MESSAGE);
+                    break;
                 }
             }
         } else if (choice == 3) {
@@ -716,8 +761,10 @@ public class GUI extends JComponent implements Runnable {
                     JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
             if (option == 0) {
                 if (isSeller) {
+                    System.out.println("seller confirmed");
                     for (int i = 0; i < sellerList.size(); i++) {
-                        if ((sellerList.get(i).getUsername().equals(userName)) && (sellerList.get(i).getEmail()).equals(email)) {
+                        if (((sellerList.get(i).getUsername()).equals(userName)) && (sellerList.get(i).getPassword()).equals(this.password)) {
+                            System.out.println("account found");
                             sellerList.remove(i);
                             storeList.remove(i);
                         }
@@ -725,11 +772,19 @@ public class GUI extends JComponent implements Runnable {
                             JOptionPane.showMessageDialog(null, "Account successfully edited!");
                             success = true;
                             exit();
+                            if (sellerList.size() == 0) {
+                                BufferedWriter bw = new BufferedWriter(new FileWriter("customers.txt"));
+                                bw.write("");
+                                bw.close();
+                                break;
+                            }
+                            break;
                         }
                     }
                 } else {
                     for (int i = 0; i < customerList.size(); i++) {
-                        if ((customerList.get(i).getUsername().equals(userName)) && (customerList.get(i).getEmail()).equals(email)) {
+                        //close window or remove buttons so user has to exit
+                        if ((customerList.get(i).getUsername().equals(userName)) && (customerList.get(i).getPassword()).equals(this.password)) {
                             customerList.remove(i);
                         }
                         if ((!((customerList.get(i).getUsername()).equals(userName)))) {
@@ -740,8 +795,9 @@ public class GUI extends JComponent implements Runnable {
                                 BufferedWriter bw = new BufferedWriter(new FileWriter("customers.txt"));
                                 bw.write("");
                                 bw.close();
-                                return true;
+                                break;
                             }
+                            break;
                         }
                     }
                 }
@@ -760,14 +816,24 @@ public class GUI extends JComponent implements Runnable {
         return false;
     }
 
-    public boolean customerInteraction(int choice, String user) {
+    public boolean userInteraction(int choice, String user) {
         if (choice == 0) {
             //msg.. open new window and will have to check if two users already have a shared file
         } else if (choice == 1) {
+            Object[] options = {"YES", "NO"};
+            int option =  JOptionPane.showOptionDialog(null, "Are you sure you want to block " + user + "?", "Block?", JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+            if (option == 0) {
 
+            } else {
+
+            }
             //block
         } else if (choice == 2) {
             //invis
+            Object[] options = {"YES", "NO"};
+            int option =  JOptionPane.showOptionDialog(null, "Are you sure you want to be invisible to " + user + "?", "Invisible?", JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
         } else {
             //blank for close
         }
@@ -777,6 +843,5 @@ public class GUI extends JComponent implements Runnable {
         return account.getUsername() + ", " + account.getPassword() + ", " + account.getEmail() + ", " + account.isSeller();
     }
 }
-
 
 
