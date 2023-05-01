@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
+import java.time.LocalTime;
+import java.util.Scanner;
+
 
 public class GUI extends JComponent implements Runnable {
     ArrayList<Account> customerList = new ArrayList<>();
@@ -11,15 +14,19 @@ public class GUI extends JComponent implements Runnable {
 
     private static ArrayList<String> messageList = new ArrayList<String>();
     private static ArrayList<String> storeList = new ArrayList<String>();
-    private static ArrayList<String> invisibleList = new ArrayList<String>();
+    private static ArrayList<String> invisibleToList = new ArrayList<String>();
 
+    private static ArrayList<String> invisibleByList = new ArrayList<String>();
     private static ArrayList<String> blockedList = new ArrayList<String>();
 
+    private static ArrayList<String> blockedMeList = new ArrayList<String>();
+    private static ArrayList<String> invisibleList = new ArrayList<String>();
 
     private static String userName;
     private static String password;
     private static String email;
     private static boolean isSeller;
+    private static String recipient;
 
 
     public void startProgram() {
@@ -130,9 +137,9 @@ public class GUI extends JComponent implements Runnable {
                     } else {
                         String password = JOptionPane.showInputDialog(null, "Please enter your password");
                         if (choice == 0) {
-                            newAccount = new Account(email, username, password, true);
+                            newAccount = new Account(email, username, password);
                         } else {
-                            newAccount = new Account(email, username, password, false);
+                            newAccount = new Account(email, username, password);
                         }
                         if ((newAccount.getEmail() != null) && (newAccount.getPassword() != null) && (newAccount.getUsername() != null)) {
                             if (choice == 0) {
@@ -185,6 +192,39 @@ public class GUI extends JComponent implements Runnable {
         JPanel topPanel = new JPanel();
         topPanel.setBackground(new Color(185, 240, 255));
 
+        
+        JButton listSellers = new JButton("List Sellers");
+        topPanel.add(listSellers);
+
+        listSellers.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ArrayList<String> choiceArray = new ArrayList<>();
+                    for (int i = 0; i < sellerList.size(); i++) {
+                        choiceArray.add(sellerList.get(i).getUsername());
+                    }
+                    String[] choices = new String[choiceArray.size()];
+                    for (int j = 0; j < choiceArray.size(); j++) {
+                        choices[j] = choiceArray.get(j);
+                    }
+
+                    recipient = (String) JOptionPane.showInputDialog(null, "Choose a user to message",
+                            "List of sellers", JOptionPane.QUESTION_MESSAGE, null,
+                            choices, choices[0]);
+                    Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
+
+                    int choice = JOptionPane.showOptionDialog(null, "Please select an option", recipient, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
+
+                    userInteraction(choice, recipient);
+
+
+                } catch (ArrayIndexOutOfBoundsException a) {
+                    JOptionPane.showMessageDialog(null, "There are no customers yet!");
+                }
+            }
+
+        });
         JButton listStores = new JButton("List Stores");
         topPanel.add(listStores);
 
@@ -217,7 +257,7 @@ public class GUI extends JComponent implements Runnable {
                         String line;
                         while ((line = br.readLine()) != null) {
                             if (line.contains(store)) {
-                                user =  line.substring(0, line.indexOf(","));
+                                recipient =  line.substring(0, line.indexOf(","));
                             }
                         }
                     } catch (Exception r) {
@@ -227,13 +267,19 @@ public class GUI extends JComponent implements Runnable {
                     Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
                     int choice = JOptionPane.showOptionDialog(null, "Please select an option", user,
                             JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
-                    userInteraction(choice, user);
+                    if (choice == 0) {
+                        messageRead();
+                    } else if (choice == 1 || choice == 2) {
+                        userInteraction(choice, recipient);
+                    } else {
+
+                    }
+                    userInteraction(choice, recipient);
                 } catch (ArrayIndexOutOfBoundsException a) {
                     JOptionPane.showMessageDialog(null, "There are no sellers yet!");
                 }
             }
         });
-
 
         JButton searchSeller = new JButton("Search Seller");
         topPanel.add(searchSeller);
@@ -246,6 +292,7 @@ public class GUI extends JComponent implements Runnable {
                 boolean success = false;
                 try {
                     String search = sellerField.getText();
+                    recipient = search;
                     for (int i = 0; i < sellerList.size(); i++) {
                         if ((sellerList.get(i).getUsername()).equals(search)) {
                             //new array of options
@@ -336,14 +383,22 @@ public class GUI extends JComponent implements Runnable {
                         choices[j] = choiceArray.get(j);
                     }
 
-                    String user = (String) JOptionPane.showInputDialog(null, "Choose a user to message",
+                    recipient = (String) JOptionPane.showInputDialog(null, "Choose a user to message",
                             "List of customers", JOptionPane.QUESTION_MESSAGE, null,
                             choices, choices[0]);
 
                     Object[] options = {"Message User", "Block User", "Become Invisible To User", "Close"};
-                    int choice = JOptionPane.showOptionDialog(null, "Please select an option", user,
-                            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
-                    userInteraction(choice, user);
+                    int choice = JOptionPane.showOptionDialog(null, "Please select an option", recipient, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[3]);
+                    System.out.println("Before if");
+                    if (choice == 0) {
+                        System.out.println("0");
+                        messageRead();
+                    } else if (choice == 1 || choice == 2) {
+                        System.out.println("1/2");
+                        userInteraction(choice, recipient);
+                    } else {
+                        System.out.println("else");
+                    }
                 } catch (ArrayIndexOutOfBoundsException a) {
                     JOptionPane.showMessageDialog(null, "There are no customers yet!");
                 }
@@ -362,6 +417,7 @@ public class GUI extends JComponent implements Runnable {
                 boolean success = false;
                 try {
                     String search = customerField.getText();
+                    recipient = search;
                     for (int i = 0; i < customerList.size(); i++) {
                         if ((customerList.get(i).getUsername()).equals(search)) {
                             success = true;
@@ -509,11 +565,8 @@ public class GUI extends JComponent implements Runnable {
                 line = line.substring(line.indexOf(",") + 2, line.length());
                 String password = line.substring(0, line.indexOf(","));
                 line = line.substring(line.indexOf(",") + 2, line.length());
-                String seller = line.substring(0, line.indexOf(","));
-                boolean isSeller = Boolean.parseBoolean(seller);
-                line = line.substring(line.indexOf(",") + 2, line.length());
                 String email = line;
-                Account newAccount = new Account(username, password, email, isSeller);
+                Account newAccount = new Account(email, username, password);
                 customerList.add(newAccount);
             }
             br.close();
@@ -528,16 +581,13 @@ public class GUI extends JComponent implements Runnable {
                 line = line.substring(line.indexOf(",") + 2, line.length());
                 String password = line.substring(0, line.indexOf(","));
                 line = line.substring(line.indexOf(",") + 2, line.length());
-                String seller = line.substring(0, line.indexOf(","));
-                boolean isSeller = Boolean.parseBoolean(seller);
-                line = line.substring(line.indexOf(",") + 2, line.length());
                 String email = line;
-                Account newAccount = new Account(username, password, email, isSeller);
+                Account newAccount = new Account(email, username, password);
                 sellerList.add(newAccount);
             }
             br.close();
         } catch (Exception e) {
-
+            System.out.println("Error no trd5rdf7r5dc7r6d7itfrdtrd5rd7");
         }
     }
     public boolean existingEmail(String email, int choice) {
@@ -627,6 +677,9 @@ public class GUI extends JComponent implements Runnable {
                     if (username.equals((user.trim()))) {
                         line = line.substring(line.indexOf(",") + 1, line.length());
                         line = line.trim();
+                        
+                        
+                        
                         if (password.equals(line.substring(0, line.indexOf(",")))) {
                             this.password = password;
                             return true;
@@ -643,7 +696,9 @@ public class GUI extends JComponent implements Runnable {
                 BufferedReader br = new BufferedReader(new FileReader("customers.txt"));
                 String line;
                 while ((line = br.readLine()) != null) {
+                    /////////////////////////////////////////////////
                     String user = line.substring(0, line.indexOf(","));
+                    /////////////////////////////////////////////////
                     if (username.equals((user.trim()))) {
                         line = line.substring(line.indexOf(",") + 1, line.length());
                         line = line.trim();
@@ -727,6 +782,7 @@ public class GUI extends JComponent implements Runnable {
                     }
                 } else {
                     for (int i = 0; i < customerList.size(); i++) {
+                        System.out.println(customerList.get(i).getPassword());
                         if (((customerList.get(i).getPassword()).equals(password)) && ((customerList.get(i).getUsername()).equals(userName))) {
                             customerList.get(i).setPassword(newPassword);
                         }
@@ -844,6 +900,23 @@ public class GUI extends JComponent implements Runnable {
     }
 
     public boolean userInteraction(int choice, String user) {
+        LocalTime currentTime;  
+        int hours;
+        int minutes;
+        String time;
+        currentTime = LocalTime.now();
+        hours = currentTime.getHour();
+        minutes = currentTime.getMinute();
+        time = hours + ":" + minutes;
+        Messages message = new Messages();
+        messageList = message.getMessages();
+        int sizes = (messageList != null) ? messageList.size() : 0;
+        if (sizes == 0) {
+            messageList.add(userName + "," + recipient + "," + time + "," + "START OF CONVO" + 
+                            "," + "false," + "false," + "false," + "false");
+            System.out.println("inSizesidhvhjvhvuovuyhkvyuvu");
+            message.writeMessages(messageList);
+        }
         if (choice == 0) {
             //msg.. open new window and will have to check if two users already have a shared file
         } else if (choice == 1) {
@@ -852,6 +925,29 @@ public class GUI extends JComponent implements Runnable {
                             + user + "?", "Block?", JOptionPane.DEFAULT_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
             if (option == 0) {
+                    // Have to go through a for loop through messageList, and turn the
+                    // (4th index to true (Sender blocks receiver) if the user is the sender)
+                int size = (messageList != null) ? messageList.size() : 0;
+                for (int i = 0; i < size; i++) {
+                    String[] messageToEdit = messageList.get(i).split(",");
+                    if (messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                        String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                messageToEdit[2] + "," + messageToEdit[3] + "," + "true" + "," +
+                                messageToEdit[5] + "," + messageToEdit[6] + "," + messageToEdit[7];
+                        messageList.set(i, newLine);
+                        message.writeMessages(messageList);
+                    }
+
+                    if (messageToEdit[1].equals(userName) && messageToEdit[0].equals(recipient)) {
+                        String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                messageToEdit[2] + "," + messageToEdit[3] + "," + messageToEdit[4] + "," +
+                                "true" + "," + messageToEdit[6] + "," + messageToEdit[7];
+                        messageList.set(i, newLine);
+                        message.writeMessages(messageList);
+                    }
+                }
+                System.out.println("You have blocked " + recipient + ". They will no longer be able to send " +
+                            "or view your messages. However, you can still interact with the messages.");
                 for (int i = 0; i < blockedList.size(); i++) {
                     String line = blockedList.get(i);
                     if(((line.substring(0, line.indexOf(",") )).equals(userName))) {
@@ -868,7 +964,34 @@ public class GUI extends JComponent implements Runnable {
             //invis
             Object[] options = {"YES", "NO"};
             int option =  JOptionPane.showOptionDialog(null, "Are you sure you want to be invisible to " + user + "?", "Invisible?", JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+            JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+            int size = (messageList != null) ? messageList.size() : 0;
+            System.out.println(size);
+            for (int i = 0; i < size; i++) {
+                String[] messageToEdit = messageList.get(i).split(",");
+                System.out.println("infor");
+                if (messageToEdit[0].trim().equals(userName) && messageToEdit[1].trim().equals(recipient)) {
+                    String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                            messageToEdit[2] + "," + messageToEdit[3] + "," + messageToEdit[4] + "," +
+                            messageToEdit[5] + "," + "true" + "," + messageToEdit[7];
+                    System.out.println("first" + newLine);
+                    messageList.set(i, newLine);
+                    message.writeMessages(messageList);
+                }
+
+                if (messageToEdit[1].equals(userName) && messageToEdit[0].equals(recipient)) {
+                    String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                            messageToEdit[2] + "," + messageToEdit[3] + "," + messageToEdit[4] + "," +
+                            messageToEdit[5] + "," + messageToEdit[6] + "," + "true" + "," + 
+                            messageToEdit[7];
+                    System.out.println("first" + newLine);
+                    messageList.set(i, newLine);
+                    message.writeMessages(messageList);
+                }
+
+            }
+            System.out.println("Now invisible to " + recipient + "." + " They will no longer be able to see " +
+                    "your store or your account.");
             for (int i = 0; i < invisibleList.size(); i++) {
                 String line = invisibleList.get(i);
                 if(((line.substring(0, line.indexOf(",") )).equals(userName))) {
@@ -922,12 +1045,1013 @@ public class GUI extends JComponent implements Runnable {
         } catch (Exception e) {
 
         }
-
     }
-
     public String accountString(Account account) {
-        return account.getUsername() + ", " + account.getPassword() + ", " + account.getEmail() + ", " + account.isSeller();
+        return account.getUsername() + ", " + account.getPassword() + ", " + account.getEmail();// + ", " + account.isSeller();
+    }
+    
+    public void messageRead() {
+        Scanner scan = new Scanner(System.in);
+        LocalTime currentTime;  
+        int hours;
+        int minutes;
+        String time;
+        String choice = "";
+        Messages message = new Messages();
+        messageList = message.getMessages();
+        if (messageList == null) {
+            System.out.println("null");
+        }
+        
+
+        // Stores store = new Stores();
+        // storeList = store.getStores();
+
+
+        // String storeName = null;
+        // String sell = null;
+        // String cust = null;
+        // boolean invalid = false;
+        if (isSeller) {
+            int size = (messageList != null) ? messageList.size() : 0;
+            // if (size == 0) {
+            //     messageList.add(userName + "," + recipient + "," + time + "," + "START OF CONVO" + 
+            //                     "," + "false," + "false," + "false," + "false");
+            //     message.writeMessages(messageList);
+            // }
+            if (size == 0) {
+                while (true) {
+                    System.out.println("Message history:");
+                    size = (messageList != null) ? messageList.size() : 0;
+                    currentTime = LocalTime.now();
+                    hours = currentTime.getHour();
+                    minutes = currentTime.getMinute();
+                    time = hours + ":" + minutes;
+                    // if (size == 0) {
+                    //     messageList.add(userName + "," + recipient + "," + time + "," + "START OF CONVO" + 
+                    //                     "," + "false," + "false," + "false," + "false");
+                    //     message.writeMessages(messageList);
+                    // }
+                    for (int x = 0; x < size; x++) {
+                        if (messageList.get(x).contains(recipient) && messageList.get(x).contains(recipient)) {
+                            String[] line = messageList.get(x).split(",");
+                            String send = line[0].trim();
+                            String receive = line[1].trim();
+                            String showTime = line[2].trim();
+                            String mess = line[3].trim();
+                            if (!mess.equals("START OF CONVO")) {
+                                System.out.println("Time: " + showTime + "    " + send + ": " + mess);
+                            }
+                        }
+                    }
+                    System.out.println("Choose an option");
+                    System.out.println("1. Write messages");
+                    System.out.println("2. Edit");
+                    System.out.println("3. Delete");
+                    System.out.println("4. Block");
+                    System.out.println("5. Invisible");
+                    System.out.println("6. Import Messages");
+                    System.out.println("7. Export Messages");
+                    System.out.println("8. Exit");
+    
+                    choice = scan.nextLine();
+    
+                    switch (choice) {
+                        case "1":
+                            while (true) {
+                                // Write message in the format of
+                                // (Sender, Receiver, TimeStamp, Message, false, false, false, false)
+                                System.out.println("Enter message:          (Enter 'exit' to exit)");
+                                String newMessage = scan.nextLine();
+                                if (newMessage.equals("exit")) {
+                                    break;
+                                }
+                                currentTime = LocalTime.now();
+                                hours = currentTime.getHour();
+                                minutes = currentTime.getMinute();
+                                time = hours + ":" + minutes;
+                                messageList.add(userName + "," + recipient + "," + time + "," + newMessage +
+                                        ",false,false,false,false");
+                                message.writeMessages(messageList);
+    
+                            }
+                            break;
+                        case "2":
+                            // enter the specific message you want to edit, and the new message
+                            // Have to go through a for loop, until the message is found && the sender is the user
+                            // otherwise, print out "choose a valid message to edit"
+                            size = (messageList != null) ? messageList.size() : 0;
+                            for (int i = 0; i < size; i++) {
+                                System.out.println("Enter the message you want to edit: ");
+                                String edit = scan.nextLine();
+                                String[] messageToEdit = messageList.get(i).split(",");
+                                if (messageToEdit[3].equals(edit)
+                                        && messageToEdit[0].equals(userName) && messageToEdit[1] == recipient) {
+                                    System.out.println("Enter the new message: ");
+                                    String newMessage = scan.nextLine();
+                                    String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                            messageToEdit[2] + "," + newMessage + "," + messageToEdit[4] + "," +
+                                            messageToEdit[5] + "," + messageToEdit[6] + "," + messageToEdit[7];
+    
+                                    messageList.set(i, newLine);
+                                    message.writeMessages(messageList);
+                                }
+                            }
+                            //after the for loop, update the Message.txt file with the new messageList
+    
+                            break;
+                        case "3":
+                            // enter the specific message you want to delete
+                            // Have to go through a for loop, until the message is found && the sender is the user
+                            // otherwise, print out "choose a valid message to delete"
+                            System.out.println("Enter the message you want to delete: ");
+                            String delete = scan.nextLine();
+                            size = (messageList != null) ? messageList.size() : 0;
+                            for (int i = 0; i < size; i++) {
+                                String[] messageToEdit = messageList.get(i).split(",");
+                                if (messageToEdit[3].equals(delete)
+                                        && messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                                    messageList.remove(i);
+                                    message.writeMessages(messageList);
+                                    break;
+                                } else {
+                                    System.out.println("Error: Choose a valid message to delete");
+                                }
+                            }
+            }
+            for (int x = 0; x < size; x++) {
+
+            /*
+            0. Sender
+            1. Receiver
+            2. TimeStamp
+            3. Message
+            4. Sender blocks receiver
+            5. Receiver blocks sender
+            6. Sender invisible to receiver
+            7. Receiver invisible to sender
+             */
+                String[] line = messageList.get(x).split(",");
+
+                if ((line[0].trim().equals(userName)) || (line[1].trim().equals(userName))) {
+                    if (line[0].trim().equals(userName)) {
+                        if (line[4].equals("true")) {
+                            blockedList.add(line[1]);
+                            //Added the receiver to blocked list to indicate that I blocked the receiver
+                        }
+                        if (line[5].equals("true")) {
+                            blockedMeList.add(line[1]);
+                            //Added the receiver to blocked me list to indicate that I am blocked by the receiver
+                        }
+
+                        if (line[6].equals("true")) {
+                            invisibleToList.add(line[1]);
+                            // Added the receiver to invisible list to indicate that I am invisible to the receiver
+                        }
+
+                        if (line[7].equals("true")) {
+                            invisibleByList.add(line[1]);
+                            // Added the receiver to invisible list to indicate that the receiver is invisible to me
+                        }
+
+                    } else {
+                        if (line[4].equals("true")) {
+                            blockedMeList.add(line[0]);
+                        }
+                        if (line[5].equals("true")) {
+                            blockedList.add(line[0]);
+                        }
+                        if (line[6].equals("true")) {
+                            invisibleByList.add(line[0]);
+                        }
+                        if (line[7].equals("true")) {
+                            invisibleToList.add(line[0]);
+                        }
+                    }
+                }
+            }
+            if (blockedList.contains(recipient)) {
+                System.out.println("You blocked this customer, you can still view, send, " +
+                        "edit messages but they will not be able to see your messages.");
+            }
+
+            if (invisibleToList.contains(recipient)) {
+                System.out.println("You blocked this customer, you can still view, send, " +
+                        "edit messages but they will not be able to see your messages.");
+            }
+
+            if (invisibleToList.contains(recipient)) {
+                System.out.println("You blocked this customer, you can still view, send, " +
+                        "edit messages but they will not be able to see your messages.");
+            }
+
+            if (invisibleToList.contains(recipient)) {
+                System.out.println("You blocked this customer, you can still view, send, " +
+                        "edit messages but they will not be able to see your messages.");
+            }
+
+            if (invisibleToList.contains(recipient)) {
+                System.out.println("You blocked this customer, you can still view, send, " +
+                        "edit messages but they will not be able to see your messages.");
+            }
+
+            if (invisibleToList.contains(recipient)) {
+                System.out.println("You blocked this customer, you can still view, send, " +
+                        "edit messages but they will not be able to see your messages.");
+            }
+
+            if (invisibleToList.contains(recipient)) {
+                System.out.println("You are invisible to this customer, you can still view, send, " +
+                        "edit messages but they will not be able to see your messages.");
+            }
+
+
+            while (true) {
+                System.out.println("Message history:");
+                size = (messageList != null) ? messageList.size() : 0;
+                currentTime = LocalTime.now();
+                hours = currentTime.getHour();
+                minutes = currentTime.getMinute();
+                time = hours + ":" + minutes;
+                if (size == 0) {
+                    messageList.add(userName + "," + recipient + "," + time + "," + "START OF CONVO" + 
+                                    "," + "false," + "false," + "false," + "false");
+                    message.writeMessages(messageList);
+                }
+                for (int x = 0; x < size; x++) {
+                    if (messageList.get(x).contains(recipient) && messageList.get(x).contains(userName)) {
+                        String[] line = messageList.get(x).split(",");
+                        String send = line[0].trim();
+                        String receive = line[1].trim();
+                        String showTime = line[2].trim();
+                        String mess = line[3].trim();
+                        if (!mess.equals("START OF CONVO")) {
+                            System.out.println("Time: " + showTime + "    " + send + ": " + mess);
+                        }
+                    }
+                }
+                System.out.println("Choose an option");
+                System.out.println("1. Write messages");
+                System.out.println("2. Edit");
+                System.out.println("3. Delete");
+                System.out.println("4. Block");
+                System.out.println("5. Invisible");
+                System.out.println("6. Import Messages");
+                System.out.println("7. Export Messages");
+                System.out.println("8. Exit");
+
+                choice = scan.nextLine();
+
+                switch (choice) {
+                    case "1":
+                        while (true) {
+                            // Write message in the format of
+                            // (Sender, Receiver, TimeStamp, Message, false, false, false, false)
+                            System.out.println("Enter message:          (Enter 'exit' to exit)");
+                            String newMessage = scan.nextLine();
+                            if (newMessage.equals("exit")) {
+                                break;
+                            }
+                            currentTime = LocalTime.now();
+                            hours = currentTime.getHour();
+                            minutes = currentTime.getMinute();
+                            time = hours + ":" + minutes;
+                            messageList.add(userName + "," + recipient + "," + time + "," + newMessage +
+                                    ",false,false,false,false");
+                            message.writeMessages(messageList);
+
+                        }
+                        break;
+                    case "2":
+                        // enter the specific message you want to edit, and the new message
+                        // Have to go through a for loop, until the message is found && the sender is the user
+                        // otherwise, print out "choose a valid message to edit"
+                        size = (messageList != null) ? messageList.size() : 0;
+                        for (int i = 0; i < size; i++) {
+                            System.out.println("Enter the message you want to edit: ");
+                            String edit = scan.nextLine();
+                            String[] messageToEdit = messageList.get(i).split(",");
+                            if (messageToEdit[3].equals(edit)
+                                    && messageToEdit[0].equals(userName) && messageToEdit[1] == recipient) {
+                                System.out.println("Enter the new message: ");
+                                String newMessage = scan.nextLine();
+                                String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                        messageToEdit[2] + "," + newMessage + "," + messageToEdit[4] + "," +
+                                        messageToEdit[5] + "," + messageToEdit[6] + "," + messageToEdit[7];
+
+                                messageList.set(i, newLine);
+                                message.writeMessages(messageList);
+                            }
+                        }
+                        //after the for loop, update the Message.txt file with the new messageList
+
+                        break;
+                    case "3":
+                        // enter the specific message you want to delete
+                        // Have to go through a for loop, until the message is found && the sender is the user
+                        // otherwise, print out "choose a valid message to delete"
+                        System.out.println("Enter the message you want to delete: ");
+                        String delete = scan.nextLine();
+                        size = (messageList != null) ? messageList.size() : 0;
+                        for (int i = 0; i < size; i++) {
+                            String[] messageToEdit = messageList.get(i).split(",");
+                            if (messageToEdit[3].equals(delete)
+                                    && messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                                messageList.remove(i);
+                                message.writeMessages(messageList);
+                                break;
+                            } else {
+                                System.out.println("Error: Choose a valid message to delete");
+                            }
+                        }
+                    }
+                }
+            }
+            } else {
+                size = (messageList != null) ? messageList.size() : 0;
+                for (int x = 0; x < size; x++) {
+                /*
+                0. Sender
+                1. Receiver
+                2. TimeStamp
+                3. Message
+                4. Sender blocks receiver
+                5. Receiver blocks sender
+                6. Sender invisible to receiver
+                7. Receiver invisible to sender
+                */
+                    String[] line = messageList.get(x).split(",");
+
+                    if ((line[0].trim().equals(userName)) || (line[1].trim().equals(userName))) {
+                        if (line[0].trim().equals(userName)) {
+                            if (line[4].equals("true")) {
+                                blockedList.add(line[1]);
+                                //Added the receiver to blocked list to indicate that I blocked the receiver
+                            }
+                            if (line[5].equals("true")) {
+                                blockedMeList.add(line[1]);
+                                //Added the receiver to blocked me list to indicate that I am blocked by the receiver
+                            }
+
+                            if (line[6].equals("true")) {
+                                invisibleToList.add(line[1]);
+                                // Added the receiver to invisible list to indicate that I am invisible to the receiver
+                            }
+
+                            if (line[7].equals("true")) {
+                                invisibleByList.add(line[1]);
+                                // Added the receiver to invisible list to indicate that the receiver is invisible to me
+                            }
+
+                        } else {
+                            if (line[4].equals("true")) {
+                                blockedMeList.add(line[0]);
+                            }
+                            if (line[5].equals("true")) {
+                                blockedList.add(line[0]);
+                            }
+                            if (line[6].equals("true")) {
+                                invisibleByList.add(line[0]);
+                            }
+                            if (line[7].equals("true")) {
+                                invisibleToList.add(line[0]);
+                            }
+                        }
+                    }
+
+                }
+                if (blockedList.contains(recipient)) {
+                    System.out.println("You blocked this seller, you can still view, send, " +
+                            "edit messages but they will not be able to see your messages.");
+                }
+    
+                if (invisibleToList.contains(recipient)) {
+                    System.out.println("You are invisible to this seller, you can still view, send, " +
+                            "edit messages but they will not be able to see your messages.");
+                }
+                while (true) {
+                    System.out.println("Message History:");
+                    size = (messageList != null) ? messageList.size() : 0;
+                    currentTime = LocalTime.now();
+                    hours = currentTime.getHour();
+                    minutes = currentTime.getMinute();
+                    time = hours + ":" + minutes;
+                    if (size == 0) {
+                        messageList.add(userName + "," + recipient + "," + time + "," + "START OF CONVO" + 
+                                        "," + recipient + "," + "false," + "false," + "false," + "false");
+                        message.writeMessages(messageList);
+                    }
+                    for (int x = 0; x < size; x++) {
+                        if (messageList.get(x).contains(recipient) && messageList.get(x).contains(userName)) {
+                            String[] line = messageList.get(x).split(",");
+                            String send = line[0].trim();
+                            String receive = line[1].trim();
+                            String showTime = line[2].trim();
+                            String mess = line[3].trim();
+                            if (!mess.equals("START OF CONVO")) {
+                                System.out.println("Time: " + showTime + "    " + send + ": " + mess);
+                            }
+    
+                        }
+                    }
+                    System.out.println("Choose an option");
+                    System.out.println("1. Write messages");
+                    System.out.println("2. Edit");
+                    System.out.println("3. Delete");
+                    System.out.println("4. Block");
+                    System.out.println("5. Invisible");
+                    System.out.println("6. Import Messages");
+                    System.out.println("7. Export Messages");
+                    System.out.println("8. Exit");
+                    choice = scan.nextLine();
+    
+                    switch (choice) {
+                        case "1":
+                            while (true) {
+                                // Write message in the format of
+                                // (Sender, Receiver, TimeStamp, Message, false, false, false, false)
+                                System.out.println("Enter message:          (Enter 'exit' to exit)");
+                                String newMessage = scan.nextLine();
+                                if (newMessage.equals("exit")) {
+                                    break;
+                                }
+                                currentTime = LocalTime.now();
+                                hours = currentTime.getHour();
+                                minutes = currentTime.getMinute();
+                                time = hours + ":" + minutes;
+                                messageList.add(userName + "," + recipient + "," + time + "," + newMessage +
+                                        ",false,false,false,false");
+                                message.writeMessages(messageList);
+                            }
+                            break;
+                        case "2":
+                            // enter the specific message you want to edit, and the new message
+                            // Have to go through a for loop, until the message is found && the sender is the user
+                            // otherwise, print out "choose a valid message to edit"
+                            size = (messageList != null) ? messageList.size() : 0;
+                            for (int i = 0; i < size; i++) {
+                                System.out.println("Enter the message you want to edit: ");
+                                String edit = scan.nextLine();
+                                String[] messageToEdit = messageList.get(i).split(",");
+                                if (messageToEdit[3].equals(edit)
+                                        && messageToEdit[0].equals(userName) && messageToEdit[1] == recipient) {
+                                    System.out.println("Enter the new message: ");
+                                    String newMessage = scan.nextLine();
+                                    String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                            messageToEdit[2] + "," + newMessage + "," + messageToEdit[4] + "," +
+                                            messageToEdit[5] + "," + messageToEdit[6] + "," + messageToEdit[7];
+    
+                                    messageList.set(i, newLine);
+                                    message.writeMessages(messageList);
+                                }
+                            }
+                            //after the for loop, update the Message.txt file with the new messageList
+    
+                            break;
+                        case "3":
+                            // enter the specific message you want to delete
+                            // Have to go through a for loop, until the message is found && the sender is the user
+                            // otherwise, print out "choose a valid message to delete"
+                            System.out.println("Enter the message you want to delete: ");
+                            String delete = scan.nextLine();
+                            size = (messageList != null) ? messageList.size() : 0;
+                            for (int i = 0; i < size; i++) {
+                                String[] messageToEdit = messageList.get(i).split(",");
+                                if (messageToEdit[3].equals(delete)
+                                        && messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                                    messageList.remove(i);
+                                    message.writeMessages(messageList);
+                                    break;
+                                } else {
+                                    System.out.println("Error: Choose a valid message to delete");
+                                }
+                            }
+                            //after the for loop, update the Message.txt file with the new messageList
+    
+                            break;
+                        case "4":
+    
+                            // Have to go through a for loop through messageList, and turn the
+                            // (4th index to true (Sender blocks receiver) if the user is the sender)
+                            size = (messageList != null) ? messageList.size() : 0;
+                            for (int i = 0; i < size; i++) {
+                                String[] messageToEdit = messageList.get(i).split(",");
+                                if (messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                                    String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                            messageToEdit[2] + "," + messageToEdit[3] + "," + "true" + "," +
+                                            messageToEdit[5] + "," + messageToEdit[6] + "," + messageToEdit[7];
+                                    messageList.set(i, newLine);
+                                    message.writeMessages(messageList);
+                                }
+    
+                                if (messageToEdit[1].equals(userName) && messageToEdit[0].equals(recipient)) {
+                                    String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                            messageToEdit[2] + "," + messageToEdit[3] + "," + messageToEdit[4] + "," +
+                                            "true" + "," + messageToEdit[6] + "," + messageToEdit[7];
+                                    messageList.set(i, newLine);
+                                    message.writeMessages(messageList);
+                                }
+    
+                            }
+                            System.out.println("You have blocked " + recipient + ". They will no longer be able to send " +
+                                    "or view your messages. However, you can still interact with the messages.");
+                            break;
+                        case "5":
+                            // Have to go through a for loop, and turn the
+                            // (6th index to true (Sender invisible to receiver) if the user is the sender)
+                            // (7th index to true (Receiver invisible to sender) if the user is the receiver)
+                            size = (messageList != null) ? messageList.size() : 0;
+                            for (int i = 0; i < size; i++) {
+                                String[] messageToEdit = messageList.get(i).split(",");
+                                if (messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                                    String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                            messageToEdit[2] + "," + messageToEdit[3] + "," + messageToEdit[4] + "," +
+                                            messageToEdit[5] + "," + "true" + "," + messageToEdit[7];
+                                    messageList.set(i, newLine);
+                                    message.writeMessages(messageList);
+    
+                                }
+    
+                                if (messageToEdit[1].equals(userName) && messageToEdit[0].equals(recipient)) {
+                                    String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                            messageToEdit[2] + "," + messageToEdit[3] + "," + messageToEdit[4] + "," +
+                                            messageToEdit[5] + "," + "true" + "," + messageToEdit[7];
+                                    messageList.set(i, newLine);
+                                    message.writeMessages(messageList);
+                                }
+                            }
+                            System.out.println("Now invisible to " + recipient);
+                            break;
+                        case "6":
+                            Files file = new Files(6);
+                            String mess = file.importText(userName, recipient);
+                            messageList.add(mess);
+                            message.writeMessages(messageList);
+                            break;
+                        case "7":
+                            Files f = new Files(7);
+                            f.exportConversation(messageList, userName, recipient);
+                        case "8":
+                            System.out.println("Thanks for using the messaging system!");
+                            return;
+                    }
+                }
+            }
+        }
+
+        /*
+        Scanner scan = new Scanner(System.in);
+        LocalTime currentTime;  
+        int hours;
+        int minutes;
+        String time;
+        String choice = "";
+        System.out.println("In messageRead before BI");
+        readBI();
+        System.out.println("In messageRead after BI");
+        Messages message = new Messages();
+        messageList = message.getMessages();
+        if(messageList == null) {
+            messageList = new ArrayList<>();
+            System.out.println("messageList null 1");
+        }
+        if (isSeller) {
+            System.out.println("in isSeller if");
+            int size = (messageList != null) ? messageList.size() : 0;
+            if (size == 0) {
+                System.out.println("Choose an option");
+                System.out.println("1. Write messages");
+                System.out.println("2. Edit");
+                System.out.println("3. Delete");
+                choice = scan.nextLine();
+
+                switch (choice) {
+                    case "1":
+                        while (true) {
+                            // Write message in the format of
+                            // (Sender, Receiver, TimeStamp, Message, false, false, false, false)
+                            System.out.println("Enter message:          (Enter 'exit' to exit)");
+                            String newMessage = scan.nextLine();
+                            if (newMessage.equals("exit")) {
+                                break;
+                            }
+                            currentTime = LocalTime.now();
+                            hours = currentTime.getHour();
+                            minutes = currentTime.getMinute();
+                            time = hours + ":" + minutes;
+                            messageList.add(userName + "," + recipient + "," + time + "," + newMessage +
+                                    ",false,false,false,false");
+                            if (messageList == null){
+                                System.out.println("messageList null 1");
+                            }
+                            message.writeMessages(messageList);
+                        }
+                        break;
+                    case "2":
+                        // enter the specific message you want to edit, and the new message
+                        // Have to go through a for loop, until the message is found && the sender is the user
+                        // otherwise, print out "choose a valid message to edit"
+                        size = (messageList != null) ? messageList.size() : 0;
+                        for (int i = 0; i < size; i++) {
+                            System.out.println("Enter the message you want to edit: ");
+                            String edit = scan.nextLine();
+                            String[] messageToEdit = messageList.get(i).split(",");
+                            if (messageToEdit[3].equals(edit)
+                                    && messageToEdit[0].equals(userName) && messageToEdit[1] == recipient) {
+                                System.out.println("Enter the new message: ");
+                                String newMessage = scan.nextLine();
+                                String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                        messageToEdit[2] + "," + newMessage + "," + messageToEdit[4] + "," +
+                                        messageToEdit[5] + "," + messageToEdit[6] + "," + messageToEdit[7];
+
+                                messageList.set(i, newLine);
+                                message.writeMessages(messageList);
+                            }
+                        }
+                        //after the for loop, update the Message.txt file with the new messageList
+
+                        break;
+                    case "3":
+                        // enter the specific message you want to delete
+                        // Have to go through a for loop, until the message is found && the sender is the user
+                        // otherwise, print out "choose a valid message to delete"
+                        System.out.println("Enter the message you want to delete: ");
+                        String delete = scan.nextLine();
+                        size = (messageList != null) ? messageList.size() : 0;
+                        for (int i = 0; i < size; i++) {
+                            String[] messageToEdit = messageList.get(i).split(",");
+                            if (messageToEdit[3].equals(delete)
+                                    && messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                                messageList.remove(i);
+                                message.writeMessages(messageList);
+                                break;
+                            } else {
+                                System.out.println("Error: Choose a valid message to delete");
+                            }
+                        }
+            }
+
+            for (int x = 0; x < size; x++) {
+            0. Sender
+            1. Receiver
+            2. TimeStamp
+            3. Message
+            4. Sender blocks receiver
+            5. Receiver blocks sender
+            6. Sender invisible to receiver
+            7. Receiver invisible to sender
+                String[] line = messageList.get(x).split(",");
+
+                if ((line[0].trim().equals(userName)) || (line[1].trim().equals(userName))) {
+                    System.out.println("in checkUsername in File if");
+                    if (line[0].trim().equals(userName)) {
+                        System.out.println("in checkUsername in File as first");
+                        if (line[4].equals("true")) {
+                            blockedList.add(line[1]);
+                            //Added the receiver to blocked list to indicate that I blocked the receiver
+                        }
+                        if (line[5].equals("true")) {
+                            blockedMeList.add(line[1]);
+                            //Added the receiver to blocked me list to indicate that I am blocked by the receiver
+                        }
+
+                        if (line[6].equals("true")) {
+                            invisibleToList.add(line[1]);
+                            // Added the receiver to invisible list to indicate that I am invisible to the receiver
+                        }
+
+                        if (line[7].equals("true")) {
+                            invisibleByList.add(line[1]);
+                            // Added the receiver to invisible list to indicate that the receiver is invisible to me
+                        }
+
+                    } else {
+                        System.out.println("in checkUsername in File as second");
+                        if (line[4].equals("true")) {
+                            blockedMeList.add(line[0]);
+                        }
+                        if (line[5].equals("true")) {
+                            blockedList.add(line[0]);
+                        }
+                        if (line[6].equals("true")) {
+                            invisibleByList.add(line[0]);
+                        }
+                        if (line[7].equals("true")) {
+                            invisibleToList.add(line[0]);
+                        }
+                    }
+                }
+                choice = scan.nextLine();
+
+                while (true) {
+                    System.out.println("Message history:");
+                    size = (messageList != null) ? messageList.size() : 0;
+                    currentTime = LocalTime.now();
+                    hours = currentTime.getHour();
+                    minutes = currentTime.getMinute();
+                    time = hours + ":" + minutes;
+                    if (size == 0) {
+                        messageList.add(userName + "," + recipient + "," + time + "," + "START OF CONVO" + "," + "false," + "false," + "false," + "false");
+                        message.writeMessages(messageList);
+                    }
+                    for (int y = 0; x < size; x++) {
+                        if (messageList.get(x).contains(recipient) && messageList.get(x).contains(recipient)) {
+                            String[] lines = messageList.get(y).split(",");
+                            String send = lines[0].trim();
+                            String receive = lines[1].trim();
+                            String showTime = lines[2].trim();
+                            String mess = lines[3].trim();
+                            if (!mess.equals("START OF CONVO")) {
+                                System.out.println("Time: " + showTime + "    " + send + ": " + mess);
+                            }
+                        }
+                    }
+
+                System.out.println("Choose an option");
+                System.out.println("1. Write messages");
+                System.out.println("2. Edit");
+                System.out.println("3. Delete");
+                
+
+                switch (choice) {
+                    case "1":
+                        while (true) {
+                            // Write message in the format of
+                            // (Sender, Receiver, TimeStamp, Message, false, false, false, false)
+                            System.out.println("Enter message:          (Enter 'exit' to exit)");
+                            String newMessage = scan.nextLine();
+                            if (newMessage.equals("exit")) {
+                                break;
+                            }
+                            currentTime = LocalTime.now();
+                            hours = currentTime.getHour();
+                            minutes = currentTime.getMinute();
+                            time = hours + ":" + minutes;
+                            messageList.add(userName + "," + recipient + "," + time + "," + newMessage +
+                                    ",false,false,false,false");
+                            message.writeMessages(messageList);
+                        }
+                        break;
+                    case "2":
+                        // enter the specific message you want to edit, and the new message
+                        // Have to go through a for loop, until the message is found && the sender is the user
+                        // otherwise, print out "choose a valid message to edit"
+                        size = (messageList != null) ? messageList.size() : 0;
+                        for (int i = 0; i < size; i++) {
+                            System.out.println("Enter the message you want to edit: ");
+                            String edit = scan.nextLine();
+                            String[] messageToEdit = messageList.get(i).split(",");
+                            if (messageToEdit[3].equals(edit)
+                                    && messageToEdit[0].equals(userName) && messageToEdit[1] == recipient) {
+                                System.out.println("Enter the new message: ");
+                                String newMessage = scan.nextLine();
+                                String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                        messageToEdit[2] + "," + newMessage + "," + messageToEdit[4] + "," +
+                                        messageToEdit[5] + "," + messageToEdit[6] + "," + messageToEdit[7];
+
+                                messageList.set(i, newLine);
+                                message.writeMessages(messageList);
+                            }
+                        }
+                        //after the for loop, update the Message.txt file with the new messageList
+
+                        break;
+                    case "3":
+                        // enter the specific message you want to delete
+                        // Have to go through a for loop, until the message is found && the sender is the user
+                        // otherwise, print out "choose a valid message to delete"
+                        System.out.println("Enter the message you want to delete: ");
+                        String delete = scan.nextLine();
+                        size = (messageList != null) ? messageList.size() : 0;
+                        for (int i = 0; i < size; i++) {
+                            String[] messageToEdit = messageList.get(i).split(",");
+                            if (messageToEdit[3].equals(delete)
+                                    && messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                                messageList.remove(i);
+                                message.writeMessages(messageList);
+                                break;
+                            } else {
+                                System.out.println("Error: Choose a valid message to delete");
+                            }
+                        }
+                }
+            }
+        }
+    } else {
+        System.out.println("in isSeller else");
+        size = (messageList != null) ? messageList.size() : 0;
+            for (int x = 0; x < size; x++) {
+            0. Sender
+            1. Receiver
+            2. TimeStamp
+            3. Message
+            4. Sender blocks receiver
+            5. Receiver blocks sender
+            6. Sender invisible to receiver
+            7. Receiver invisible to sender
+                String[] line = messageList.get(x).split(",");
+
+                if ((line[0].trim().equals(userName)) || (line[1].trim().equals(userName))) {
+                    if (line[0].trim().equals(userName)) {
+                        if (line[4].equals("true")) {
+                            blockedList.add(line[1]);
+                            //Added the receiver to blocked list to indicate that I blocked the receiver
+                        }
+                        if (line[5].equals("true")) {
+                            blockedMeList.add(line[1]);
+                            //Added the receiver to blocked me list to indicate that I am blocked by the receiver
+                        }
+
+                        if (line[6].equals("true")) {
+                            invisibleToList.add(line[1]);
+                            // Added the receiver to invisible list to indicate that I am invisible to the receiver
+                        }
+
+                        if (line[7].equals("true")) {
+                            invisibleByList.add(line[1]);
+                            // Added the receiver to invisible list to indicate that the receiver is invisible to me
+                        }
+
+                    } else {
+                        if (line[4].equals("true")) {
+                            blockedMeList.add(line[0]);
+                        }
+                        if (line[5].equals("true")) {
+                            blockedList.add(line[0]);
+                        }
+                        if (line[6].equals("true")) {
+                            invisibleByList.add(line[0]);
+                        }
+                        if (line[7].equals("true")) {
+                            invisibleToList.add(line[0]);
+                        }
+                    }
+                }
+
+            }
+
+            while (true) {
+                System.out.println("Message History:");
+                size = (messageList != null) ? messageList.size() : 0;
+                currentTime = LocalTime.now();
+                hours = currentTime.getHour();
+                minutes = currentTime.getMinute();
+                time = hours + ":" + minutes;
+                if (size == 0) {
+                    messageList.add(userName + "," + recipient + "," + time + "," + "START OF CONVO" + "," + recipient + "," + "false," + "false," + "false," + "false");
+                    message.writeMessages(messageList);
+                }
+                for (int x = 0; x < size; x++) {
+                    if (messageList.get(x).contains(recipient) && messageList.get(x).contains(userName)) {
+                        String[] line = messageList.get(x).split(",");
+                        String send = line[0].trim();
+                        String receive = line[1].trim();
+                        String showTime = line[2].trim();
+                        String mess = line[3].trim();
+                        if (!mess.equals("START OF CONVO")) {
+                            System.out.println("Time: " + showTime + "    " + send + ": " + mess);
+                        }
+
+                    }
+                }
+                System.out.println("Choose an option");
+                System.out.println("1. Write messages");
+                System.out.println("2. Edit");
+                System.out.println("3. Delete");
+                System.out.println("4. Block");
+                System.out.println("5. Invisible");
+                System.out.println("6. Exit");
+                choice = scan.nextLine();
+
+                switch (choice) {
+                    case "1":
+                        while (true) {
+                            // Write message in the format of
+                            // (Sender, Receiver, TimeStamp, Message, false, false, false, false)
+                            System.out.println("Enter message:          (Enter 'exit' to exit)");
+                            String newMessage = scan.nextLine();
+                            if (newMessage.equals("exit")) {
+                                break;
+                            }
+                            currentTime = LocalTime.now();
+                            hours = currentTime.getHour();
+                            minutes = currentTime.getMinute();
+                            time = hours + ":" + minutes;
+                            messageList.add(userName + "," + recipient + "," + time + "," + newMessage +
+                                    ",false,false,false,false");
+                            message.writeMessages(messageList);
+                        }
+                        break;
+                    case "2":
+                        // enter the specific message you want to edit, and the new message
+                        // Have to go through a for loop, until the message is found && the sender is the user
+                        // otherwise, print out "choose a valid message to edit"
+                        size = (messageList != null) ? messageList.size() : 0;
+                        for (int i = 0; i < size; i++) {
+                            System.out.println("Enter the message you want to edit: ");
+                            String edit = scan.nextLine();
+                            String[] messageToEdit = messageList.get(i).split(",");
+                            if (messageToEdit[3].equals(edit)
+                                    && messageToEdit[0].equals(userName) && messageToEdit[1] == recipient) {
+                                System.out.println("Enter the new message: ");
+                                String newMessage = scan.nextLine();
+                                String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                        messageToEdit[2] + "," + newMessage + "," + messageToEdit[4] + "," +
+                                        messageToEdit[5] + "," + messageToEdit[6] + "," + messageToEdit[7];
+
+                                messageList.set(i, newLine);
+                                message.writeMessages(messageList);
+                            }
+                        }
+                        //after the for loop, update the Message.txt file with the new messageList
+
+                        break;
+                    case "3":
+                        // enter the specific message you want to delete
+                        // Have to go through a for loop, until the message is found && the sender is the user
+                        // otherwise, print out "choose a valid message to delete"
+                        System.out.println("Enter the message you want to delete: ");
+                        String delete = scan.nextLine();
+                        size = (messageList != null) ? messageList.size() : 0;
+                        for (int i = 0; i < size; i++) {
+                            String[] messageToEdit = messageList.get(i).split(",");
+                            if (messageToEdit[3].equals(delete)
+                                    && messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                                messageList.remove(i);
+                                message.writeMessages(messageList);
+                                break;
+                            } else {
+                                System.out.println("Error: Choose a valid message to delete");
+                            }
+                        }
+                        //after the for loop, update the Message.txt file with the new messageList
+
+                        break;
+                    case "4":
+
+                        // Have to go through a for loop through messageList, and turn the
+                        // (4th index to true (Sender blocks receiver) if the user is the sender)
+                        size = (messageList != null) ? messageList.size() : 0;
+                        for (int i = 0; i < size; i++) {
+                            String[] messageToEdit = messageList.get(i).split(",");
+                            if (messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                                String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                        messageToEdit[2] + "," + messageToEdit[3] + "," + "true" + "," +
+                                        messageToEdit[5] + "," + messageToEdit[6] + "," + messageToEdit[7];
+                                messageList.set(i, newLine);
+                                message.writeMessages(messageList);
+                            }
+
+                            if (messageToEdit[1].equals(userName) && messageToEdit[0].equals(recipient)) {
+                                String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                        messageToEdit[2] + "," + messageToEdit[3] + "," + messageToEdit[4] + "," +
+                                        "true" + "," + messageToEdit[6] + "," + messageToEdit[7];
+                                messageList.set(i, newLine);
+                                message.writeMessages(messageList);
+                            }
+                            System.out.println("You have blocked " + recipient + ". They will no longer be able to send " +
+                                    "or view your messages. However, you can still interact with the messages.");
+                        }
+
+                        break;
+                    case "5":
+                        // Have to go through a for loop, and turn the
+                        // (6th index to true (Sender invisible to receiver) if the user is the sender)
+                        // (7th index to true (Receiver invisible to sender) if the user is the receiver)
+                        size = (messageList != null) ? messageList.size() : 0;
+                        for (int i = 0; i < size; i++) {
+                            String[] messageToEdit = messageList.get(i).split(",");
+                            if (messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+                                String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                        messageToEdit[2] + "," + messageToEdit[3] + "," + messageToEdit[4] + "," +
+                                        messageToEdit[5] + "," + "true" + "," + messageToEdit[7];
+                                messageList.set(i, newLine);
+                                message.writeMessages(messageList);
+
+                            }
+
+                            if (messageToEdit[1].equals(userName) && messageToEdit[0].equals(recipient)) {
+                                String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," +
+                                        messageToEdit[2] + "," + messageToEdit[3] + "," + messageToEdit[4] + "," +
+                                        messageToEdit[5] + "," + "true" + "," + messageToEdit[7];
+                                messageList.set(i, newLine);
+                                message.writeMessages(messageList);
+                            }
+                        }
+                        System.out.println("Now invisible to " + recipient);
+                        break;
+                    case "6":
+                        System.out.println("Thanks for using the messaging system!");
+                        System.out.println("Goodbye!");
+                        return;
+                }
+            }
+        }
+        }
+        */
+    }
+    public void messageWrite() {
+
     }
 }
-
 
