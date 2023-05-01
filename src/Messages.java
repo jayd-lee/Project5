@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class Messages {
             FileWriter fw = new FileWriter(new File("messages.txt"));
             PrintWriter pw = new PrintWriter(fw);
             for(String message : messagesNew) {
+                JOptionPane.showMessageDialog(null, message);
                 System.out.println(message);
                 pw.println(message);
             }
