@@ -1,0 +1,48 @@
+public boolean userInteraction(int choice, String user) {
+        if (choice == 0) {
+            //msg.. open new window and will have to check if two users already have a shared file
+        } else if (choice == 1) {
+            Object[] options = {"YES", "NO"};
+            int option =  JOptionPane.showOptionDialog(null, "Are you sure you want to block " + user + "?", "Block?", JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+            if (option == 0) {
+              blockedList.add(user);
+              JOptionPane.showMessageDialog(null, "You are now blocked to " + user + ".", "Block", JOptionPane.INFORMATION_MESSAGE);
+              
+            } else {
+
+            }
+            //block
+        } else if (choice == 2) {
+            
+            Object[] options = {"YES", "NO"};
+            int option =  JOptionPane.showOptionDialog(null, "Are you sure you want to be invisible to " + user + "?", "Invisible?", JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+                    if (option == 0) {
+            invisibleToList.add(user);
+            JOptionPane.showMessageDialog(null, "You are now invisible to " + user + ".", "Invisible", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            return true;
+        }
+        } else {
+            //blank for close
+        }
+      
+    }
+    
+    
+  //outside the if statements for blocking and invis
+  if (blockedList.contains(user)) {
+        JOptionPane.showMessageDialog(null, user + " is blocked and cannot receive messages.", "Blocked User", JOptionPane.WARNING_MESSAGE);
+        return false;
+    }
+
+    return true;
+}
+if (invisibleToList.contains(user)) {
+        JOptionPane.showMessageDialog(null, "You are currently invisible to " + user + ".", "Invisible", JOptionPane.INFORMATION_MESSAGE);
+        return false;
+    }
+
+    return true;
+}
