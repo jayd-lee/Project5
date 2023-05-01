@@ -1151,7 +1151,7 @@ public class GUI2 extends JComponent implements Runnable {
         // }
         if (size == 0) {
             while (true) {
-                System.out.println("Message history:");
+                //System.out.println("Message history:");
                 size = (messageList != null) ? messageList.size() : 0;
                 currentTime = LocalTime.now();
                 hours = currentTime.getHour();
@@ -1345,7 +1345,7 @@ public class GUI2 extends JComponent implements Runnable {
 
 
                 while (true) {
-                    System.out.println("Message history:");
+                    //System.out.println("Message history:");
                     size = (messageList != null) ? messageList.size() : 0;
                     currentTime = LocalTime.now();
                     hours = currentTime.getHour();
@@ -1393,7 +1393,7 @@ public class GUI2 extends JComponent implements Runnable {
                                 message.writeMessages(messageList);
                                 System.out.println(messageList);
                                 while (true) {
-                                    System.out.println("Message history:");
+                                   // System.out.println("Message history:");
                                     size = (messageList != null) ? messageList.size() : 0;
                                     currentTime = LocalTime.now();
                                     hours = currentTime.getHour();
@@ -1477,7 +1477,7 @@ public class GUI2 extends JComponent implements Runnable {
                                                 "edit messages but they will not be able to see your messages.");
                                     }
                                     while (true) {
-                                        System.out.println("Message History:");
+                                      //  System.out.println("Message History:");
                                         size = (messageList != null) ? messageList.size() : 0;
                                         currentTime = LocalTime.now();
                                         hours = currentTime.getHour();
