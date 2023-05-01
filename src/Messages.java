@@ -24,11 +24,12 @@ public class Messages {
         try{
             FileWriter fw = new FileWriter(new File("messages.txt"));
             PrintWriter pw = new PrintWriter(fw);
+            String messageFinal= "";
             for(String message : messagesNew) {
-                JOptionPane.showMessageDialog(null, message);
                 System.out.println(message);
-                pw.println(message);
+                messageFinal += message + "\n";
             }
+            JOptionPane.showMessageDialog(null, messageFinal);
             pw.close();
         } catch (IOException e) {
             e.printStackTrace();

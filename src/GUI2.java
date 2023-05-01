@@ -1191,6 +1191,10 @@ public class GUI2 extends JComponent implements Runnable {
 
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Message '" + newMessage + "' Sent!");
+                                    message.writeMessages(messageList);
+                                    System.out.println(messageList);
+                                    break;
+
                                 }
                                 currentTime = LocalTime.now();
                                 hours = currentTime.getHour();
@@ -1386,6 +1390,121 @@ public class GUI2 extends JComponent implements Runnable {
 
                             } else {
                                 JOptionPane.showMessageDialog(null, "Message '" + newMessage + "' Sent!");
+                                message.writeMessages(messageList);
+                                System.out.println(messageList);
+                                while (true) {
+                                    System.out.println("Message history:");
+                                    size = (messageList != null) ? messageList.size() : 0;
+                                    currentTime = LocalTime.now();
+                                    hours = currentTime.getHour();
+                                    minutes = currentTime.getMinute();
+                                    time = hours + ":" + minutes;
+                                    // if (size == 0) {
+                                    //     messageList.add(userName + "," + recipient + "," + time + "," + "START OF CONVO" +
+                                    //                     "," + "false," + "false," + "false," + "false");
+                                    //     message.writeMessages(messageList);
+                                    // }
+                                    for (int x = 0; x < size; x++) {
+                                        if (messageList.get(x).contains(recipient) && messageList.get(x).contains(recipient)) {
+                                            String[] line = messageList.get(x).split(",");
+                                            String send = line[0].trim();
+                                            String receive = line[1].trim();
+                                            String showTime = line[2].trim();
+                                            String mess = line[3].trim();
+                                            if (!mess.equals("START OF CONVO")) {
+                                                System.out.println("Time: " + showTime + "    " + send + ": " + mess);
+                                            }
+                                        }
+                                    }
+                                    for (int x = 0; x < size; x++) {
+                /*
+                0. Sender
+                1. Receiver
+                2. TimeStamp
+                3. Message
+                4. Sender blocks receiver
+                5. Receiver blocks sender
+                6. Sender invisible to receiver
+                7. Receiver invisible to sender
+                */
+                                        String[] line = messageList.get(x).split(",");
+
+                                        if ((line[0].trim().equals(userName)) || (line[1].trim().equals(userName))) {
+                                            if (line[0].trim().equals(userName)) {
+                                                if (line[4].equals("true")) {
+                                                    blockedList.add(line[1]);
+                                                    //Added the receiver to blocked list to indicate that I blocked the receiver
+                                                }
+                                                if (line[5].equals("true")) {
+                                                    blockedMeList.add(line[1]);
+                                                    //Added the receiver to blocked me list to indicate that I am blocked by the receiver
+                                                }
+
+                                                if (line[6].equals("true")) {
+                                                    invisibleToList.add(line[1]);
+                                                    // Added the receiver to invisible list to indicate that I am invisible to the receiver
+                                                }
+
+                                                if (line[7].equals("true")) {
+                                                    invisibleByList.add(line[1]);
+                                                    // Added the receiver to invisible list to indicate that the receiver is invisible to me
+                                                }
+
+                                            } else {
+                                                if (line[4].equals("true")) {
+                                                    blockedMeList.add(line[0]);
+                                                }
+                                                if (line[5].equals("true")) {
+                                                    blockedList.add(line[0]);
+                                                }
+                                                if (line[6].equals("true")) {
+                                                    invisibleByList.add(line[0]);
+                                                }
+                                                if (line[7].equals("true")) {
+                                                    invisibleToList.add(line[0]);
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                    if (blockedList.contains(recipient)) {
+                                        System.out.println("You blocked this seller, you can still view, send, " +
+                                                "edit messages but they will not be able to see your messages.");
+                                    }
+
+                                    if (invisibleToList.contains(recipient)) {
+                                        System.out.println("You are invisible to this seller, you can still view, send, " +
+                                                "edit messages but they will not be able to see your messages.");
+                                    }
+                                    while (true) {
+                                        System.out.println("Message History:");
+                                        size = (messageList != null) ? messageList.size() : 0;
+                                        currentTime = LocalTime.now();
+                                        hours = currentTime.getHour();
+                                        minutes = currentTime.getMinute();
+                                        time = hours + ":" + minutes;
+                                        if (size == 0) {
+                                            messageList.add(userName + "," + recipient + "," + time + "," + "START OF CONVO" +
+                                                    "," + recipient + "," + "false," + "false," + "false," + "false");
+                                            message.writeMessages(messageList);
+                                        }
+                                        for (int x = 0; x < size; x++) {
+                                            if (messageList.get(x).contains(recipient) && messageList.get(x).contains(userName)) {
+                                                String[] line = messageList.get(x).split(",");
+                                                String send = line[0].trim();
+                                                String receive = line[1].trim();
+                                                String showTime = line[2].trim();
+                                                String mess = line[3].trim();
+                                                if (!mess.equals("START OF CONVO")) {
+                                                    System.out.println("Time: " + showTime + "    " + send + ": " + mess);
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+                                }
+                                //}
                             }
 
                         }
