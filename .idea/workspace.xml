@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ba397a99-9f27-42f5-90ed-60d217f0068e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$7.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$7.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$8.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$8.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI$9.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/customers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/customers.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stores.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/stores.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Jayden" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2OWY6Em34K126bTkUJImxfMJ09J" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Project5" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Project5" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5c48b6fb-f016-4f9e-b441-ef77e5a4c83b" name="Changes" comment="" />
+      <created>1681677628069</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1681677628069</updated>
+      <workItem from="1681677629303" duration="799000" />
+      <workItem from="1681945263890" duration="2794000" />
+      <workItem from="1682136433011" duration="623000" />
+      <workItem from="1682537233995" duration="1501000" />
+      <workItem from="1682803705612" duration="3278000" />
+      <workItem from="1682890852717" duration="9146000" />
+      <workItem from="1682900279680" duration="2385000" />
+      <workItem from="1682903555600" duration="5697000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

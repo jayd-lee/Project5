@@ -1,0 +1,5 @@
+hi,Kylie,22:29,START OF CONVO,false,false,false,false
+hi,Kylie,23:7,hi,false,false,false,false
+hi,Kylie,23:7,hello,false,false,false,false
+Aadi,Jayden,23:54,Hello Jayden I am Aadi,false,true,false,true,false
+Jayden,Aadi,23:55,Hi Aadi I am Jayden,true,false,true,false
