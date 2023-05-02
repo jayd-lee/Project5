@@ -1485,6 +1485,165 @@ public class GUI extends JComponent implements Runnable {
 
 
 
+//    public void messageRead() {
+//        Messages message = new Messages();
+//        messageList = message.getMessages();
+//        if (messageList == null) {
+//            JOptionPane.showMessageDialog(null, "null");
+//        }
+//        String storeName = null;
+//        String sell = null;
+//        String cust = null;
+//        boolean invalid = false;
+//        if (isSeller) {
+//            int size = (messageList != null) ? messageList.size() : 0;
+//            for (int x = 0; x < size; x++) {
+//                String[] line = messageList.get(x).split(",");
+//
+//                if ((line[0].trim().equals(userName)) || (line[1].trim().equals(userName))) {
+//                    processLine(line);
+//                }
+//            }
+//        }
+//
+//        while (true) {
+//            int size = (messageList != null) ? messageList.size() : 0;
+//            LocalTime currentTime = LocalTime.now();
+//            int hours = currentTime.getHour();
+//            int minutes = currentTime.getMinute();
+//            String time = hours + ":" + minutes;
+//            if (size == 0) {
+//                messageList.add(userName + "," + cust + "," + time + "," + "START OF CONVO" + ",false,false,false,false");
+//                message.writeMessages(messageList);
+//            }
+//            displayMessageHistory(size);
+//
+//            Object[] options = {"Write messages", "Edit", "Delete"};
+//            int n = JOptionPane.showOptionDialog(null, "Choose an option", "Message Options",
+//                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+//
+//            switch (n) {
+//                case 0:
+//                    writeMessages();
+//                    break;
+//                case 1:
+//                    editMessage();
+//                    break;
+//                case 2:
+//                    deleteMessage();
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//    }
+//
+//    private void processLine(String[] line) {
+//        if (line[0].trim().equals(userName)) {
+//            if (line[4].equals("true")) {
+//                blockedList.add(line[1]);
+//            }
+//            if (line[5].equals("true")) {
+//                blockedMeList.add(line[1]);
+//            }
+//
+//            if (line[6].equals("true")) {
+//                invisibleToList.add(line[1]);
+//            }
+//
+//            if (line[7].equals("true")) {
+//                invisibleByList.add(line[1]);
+//            }
+//
+//        } else {
+//            if (line[4].equals("true")) {
+//                blockedMeList.add(line[0]);
+//            }
+//            if (line[5].equals("true")) {
+//                blockedList.add(line[0]);
+//            }
+//            if (line[6].equals("true")) {
+//                invisibleByList.add(line[0]);
+//            }
+//            if (line[7].equals("true")) {
+//                invisibleToList.add(line[0]);
+//            }
+//        }
+//    }
+//
+//    private void displayMessageHistory(int size) {
+//        StringBuilder messageHistory = new StringBuilder("Message history:\n");
+//        for (int x = 0; x < size; x++) {
+//            if (messageList.get(x).contains(recipient) && messageList.get(x).contains(userName)) {
+//                String[] line = messageList.get(x).split(",");
+//                String send = line[0].trim();
+//                String receive = line[1].trim();
+//                String showTime = line[2].trim();
+//                String mess = line[3].trim();
+//                if (!mess.equals("START OF CONVO")) {
+//                    messageHistory.append("Time: ").append(showTime).append("    ").append(send).append(": ").append(mess).append("\n");
+//                }
+//            }
+//        }
+//        JOptionPane.showMessageDialog(null, messageHistory.toString());
+//    }
+//
+//    private void writeMessages() {
+//        while (true) {
+//            Messages message = new Messages();
+//            messageList = message.getMessages();
+//            String newMessage = JOptionPane.showInputDialog("Enter message: (Enter 'exit' to exit)");
+//            if (newMessage.equals("exit")) {
+//                break;
+//            }
+//            LocalTime currentTime = LocalTime.now();
+//            int hours = currentTime.getHour();
+//            int minutes = currentTime.getMinute();
+//            String time = hours + ":" + minutes;
+//            messageList.add(userName + "," + recipient + "," + time + "," + newMessage + ",false,false,false,false");
+//            message.writeMessages(messageList);
+//        }
+//    }
+//
+//    private void editMessage() {
+//        Messages message = new Messages();
+//        messageList = message.getMessages();
+//        int size = (messageList != null) ? messageList.size() : 0;
+//        for (int i = 0; i < size; i++) {
+//            String edit = JOptionPane.showInputDialog("Enter the message you want to edit: ");
+//            String[] messageToEdit = messageList.get(i).split(",");
+//            if (messageToEdit[3].equals(edit) && messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+//                String newMessage = JOptionPane.showInputDialog("Enter the new message: ");
+//                String newLine = messageToEdit[0] + "," + messageToEdit[1] + "," + messageToEdit[2] + "," + newMessage + "," + messageToEdit[4] + "," + messageToEdit[5] + "," + messageToEdit[6] + "," + messageToEdit[7];
+//                messageList.set(i, newLine);
+//                message.writeMessages(messageList);
+//            }
+//        }
+//    }
+//
+//    private void deleteMessage() {
+//        Messages message = new Messages();
+//        messageList = message.getMessages();
+//        String delete = JOptionPane.showInputDialog("Enter the message you want to delete: ");
+//        int size = (messageList != null) ? messageList.size() : 0;
+//        for (int i = 0; i < size; i++) {
+//            String[] messageToEdit = messageList.get(i).split(",");
+//            if (messageToEdit[3].equals(delete) && messageToEdit[0].equals(userName) && messageToEdit[1].equals(recipient)) {
+//                messageList.remove(i);
+//                message.writeMessages(messageList);
+//                break;
+//            } else {
+//                JOptionPane.showMessageDialog(null, "Error: Choose a valid message to delete");
+//            }
+//        }
+//    }
+//
+//
+//    public void displayMessages() {
+//
+//    }
+//}
+
 
 
 
