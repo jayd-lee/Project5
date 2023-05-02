@@ -1,0 +1,6 @@
+hi,  Kylie, Kylie, Kylie,
+hey, 
+bye,  hey, hello,
+bye,  hello,
+Kylie,  hi,
+hi,  Kylie, Kylie, Kylie,

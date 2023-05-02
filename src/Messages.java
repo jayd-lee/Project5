@@ -24,7 +24,6 @@ public class Messages {
             FileWriter fw = new FileWriter(new File("messages.txt"));
             PrintWriter pw = new PrintWriter(fw);
             for(String message : messagesNew) {
-                System.out.println(message);
                 pw.println(message);
             }
             pw.close();
