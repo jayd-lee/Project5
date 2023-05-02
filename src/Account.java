@@ -1,17 +1,12 @@
-import java.util.ArrayList;
-
 public class Account {
     private String email;
     private String username;
     private String password;
-    private boolean isSeller;
-    private ArrayList<String> blockedUsers;
 
-    public Account (String username, String password, String email, boolean isSeller) {
-        this.email = email;
+    public Account (String email, String username, String password) {
+        this.email = email; 
         this.password = password;
         this.username = username;
-        this.isSeller = isSeller;
     }
 
     public String getEmail() {
@@ -24,14 +19,6 @@ public class Account {
 
     public String getUsername() {
         return username;
-    }
-
-    public boolean isSeller() {
-        return isSeller;
-    }
-
-    public void setSeller(boolean seller) {
-        isSeller = seller;
     }
 
     public void setEmail(String email) {
