@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,22 +12,15 @@ import java.util.Arrays;
  * @version 4/10/23
  *
  */
-public class Files {
+public class MessageFiles {
     private String messagePath;
     private String conversationPath;
 
-    public Files(int choice) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            if (choice == 6) {
-                System.out.println("Enter the file path for message data you want to import: ");
-                this.messagePath = reader.readLine();
-            } else {
-                System.out.println("Enter the file path for conversation data you want to export: ");
-                this.conversationPath = reader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public MessageFiles(int choice) {
+        if (choice == 6) { // Import
+            this.messagePath = JOptionPane.showInputDialog("Enter the file path for message data you want to import: ");
+        } else if (choice == 7) { // Export
+            this.conversationPath = JOptionPane.showInputDialog("Enter the file path for conversation data you want to export: ");
         }
     }
 
